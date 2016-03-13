@@ -1,0 +1,7 @@
+(ROOT
+  (S
+    (NP (PRP We))
+    (VP
+      (VBD worked)
+      (PP (IN on) (NP (DT the) (JJ final) (NN project))))
+    (. .)))

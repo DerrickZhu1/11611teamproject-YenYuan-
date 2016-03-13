@@ -1,0 +1,3 @@
+ROOT < (S=clause < (VP=mainvp [ < (/VB.?/=tensed !< is|was|were|am|are|has|have|had|do|does|did) | < /VB.?/=tensed !< VP ] & !< INSERT))
+
+adjoin (VP (INSERT insert) (VP@)) mainvp
