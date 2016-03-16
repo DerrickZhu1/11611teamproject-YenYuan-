@@ -4,19 +4,20 @@ Created on Mar 16, 2016
 authors - zhongzhu, bsennish
 
 Changes made:
-Fixed issues with aux verb recognition.
+Fixed issues with aux verb handling.
+- Treat have|has|had as aux only when sistered to a VP
+Improved main verb recognition.
+- Can handle sentences with embedded clauses.
 Handled sentences with basic negation.
-Implemented first pass post-processing.
+Implemented improved, but still imperfect post-processing.
 Cleaned up the structure of the code.
 
 TO DO (in the very near future):
 Preprocessing on complex sentences.
 Fix outstanding issues with simple constructions.
-- Bugs with auxiliaries (have/has in particular)
-- Deal with contractions
+- Deal with contractions (I'm, you're, etc.)
 Better main verb recognition - maybe with dependency parsing.
 Figure out how to stop tsurgeon from printing loads of stuff.
-Get the post-processing right.
 Maybe optimize - this is quite slow.
 '''
 
@@ -40,7 +41,7 @@ parser_path = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz"
 
 parser = StanfordParser(model_path=parser_path)
 lemmatizer = WordNetLemmatizer()
-
+# embedded = []
 
 # Writes the initial tree string to the init file.
 def init_file(tree):
@@ -49,11 +50,38 @@ def init_file(tree):
     f.close()
 
 
+'''
+For future use.
+
+def save_embedded_clause(tree):
+    pattern = '/SBAR|S/=embed > VP'
+    has_embedded =  check_output([tregex_path,
+                        '-s',
+                        pattern,
+                        init_tree_file])
+    if not has_embedded:
+        return tree
+    embedded.append(has_embedded)
+    unembedded_treestr = check_output([tsurgeon_path,
+                                '-treeFile',
+                                init_tree_file,
+                                '-s',
+                                '-po',
+                                pattern,
+                                'prune embed'])
+    with open(init_tree_file, "w+") as f:
+        f.write(str(unembedded_treestr))
+        f.close()
+    tree = Tree.fromstring(unembedded_treestr)
+    return tree 
+'''
+
+
 # Allows us to form questions from sentences with simple negations.
 def remove_negation(tree):
     words = tree.leaves()
-    if 'not' in words:
-        pattern = 'RB=neg < not'
+    if 'not' in words or 'n\'t' in words:
+        pattern = 'VP < RB=neg'
         unnegated_treestr = check_output([tsurgeon_path,
                                 '-treeFile',
                                 init_tree_file,
@@ -63,7 +91,7 @@ def remove_negation(tree):
                                 'prune neg'])
         with open(init_tree_file, "w+") as f:
             f.write(str(unnegated_treestr))
-        f.close()
+            f.close()
         tree = Tree.fromstring(unnegated_treestr)
     return tree
 
@@ -73,7 +101,8 @@ def test_aux(tree):
     # Pattern partly from the Heilman dissertation - page 74.
     pattern = ('ROOT=root < (S=clause <+(/VP.*/) (VP [ < /(MD|VB.?)/=aux < ' +
               '(VP < /VB.?/=verb) | < (/(VB.?)/=aux < is|was|were|am|are|has' +
-              '|have|had|do|does|did $ VP) | < (/(VB.?)/=aux < is|was|were|am|are)]))')  
+              '|have|had|do|does|did $ VP) | < (/(VB.?)/=aux < ' +
+              'is|was|were|am|are)]))')  
     check_aux = check_output([tregex_path,
                     '-s',
                     pattern,
@@ -84,9 +113,9 @@ def test_aux(tree):
 
 
 # Gets the main verb when there are no auxilliaries.
-# Finds VB's that don't sister with any VPs
+# Finds VB's that directly descend from the root by ROOT < S < VP < main
 def get_main_verb(tree):
-    pattern = '/(VB.?)/=main !$ VP'
+    pattern = '/(VB.?)/=main > (VP > (S > ROOT))'
     main_verb = check_output([tregex_path,
                     '-s',
                     pattern,
@@ -112,7 +141,8 @@ def fix_inflection(tree, main_verb):
 def mark_aux(tree):
     pattern = ('ROOT=root < (S=clause <+(/VP.*/) (VP [ < /(MD|VB.?)/=aux < ' +
               '(VP < /VB.?/=verb) | < (/(VB.?)/=aux < is|was|were|am|are|has' +
-              '|have|had|do|does|did $ VP) | < (/(VB.?)/=aux < is|was|were|am|are)]))') 
+              '|have|had|do|does|did $ VP) | < (/(VB.?)/=aux < ' +
+              'is|was|were|am|are)]))') 
     aux_marked_treestr = check_output([tsurgeon_path,
                                 '-treeFile',
                                 init_tree_file,
@@ -164,22 +194,23 @@ def move_no_aux(tree):
     return tree
 
 
-# Buggy
+# Detokenizes a list of tokens.
+# Still needs work.
 def detokenize(words):
-    punct = string.punctuation
-    dec = 0
-    for i in range(len(words)):
-        pos = i - dec
-        for c in words[pos]:
-            if c in punct:
-                words[pos-1] += words[pos]
-                words.remove(words[pos])
-                dec += 1
-                break
+    punct = set(list(string.punctuation))
+    pos = 0
+    new = []
+    for word in words:
+        chars = set(list(word))
+        if chars.intersection(punct):
+            new = new[:-1] + [words[pos-1] + words[pos]]
+        else:
+            new.append(word)
+        pos += 1
+    return new
 
 
 # Fix capitalization and punctuation on the question.
-# STILL NEED TO ACCOUNT FOR OTHER PUNCTUATION: DETOKENIZE
 def fix_output(tree):
     words = tree.leaves()
     pos = dict()
@@ -188,10 +219,12 @@ def fix_output(tree):
     words[0] = words[0][0].upper() + words[0][1:]
     punct = "?"
     if words[-1] in string.punctuation:
-        words = words[:-1]
+        words = words[:-1] + [punct]
+    else:
+        words += [punct]
     if pos[words[1]] != "NNP" and words[1] != 'I':
         words[1] = words[1][0].lower() + words[1][1:]
-    return " ".join(words) + punct
+    return " ".join(detokenize(words))
 
 
 def main():
@@ -200,13 +233,17 @@ def main():
     while True:  # Just do a keyboard interrupt to exit the loop.
         main_tree = parser.raw_parse(inputstr).next()
         init_file(main_tree)
+        '''
+        main_tree = save_embedded_clause(main_tree)
+        print(main_tree)
+        '''
         main_tree = remove_negation(main_tree)
         if test_aux(main_tree):
             main_tree = mark_aux(main_tree)
             main_tree = move_aux(main_tree)
         else:
             main_tree = move_no_aux(main_tree)
-        print("\nQuestion:")
+        print("\nQUESTION:")
         print(fix_output(main_tree))
         print("\nEnter a simple declarative sentence:")
         inputstr = sys.stdin.readline()
