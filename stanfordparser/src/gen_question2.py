@@ -8,6 +8,7 @@ Fixed issues with aux verb handling.
 - Treat have|has|had as aux only when sistered to a VP
 Improved main verb recognition.
 - Can handle sentences with embedded clauses.
+- Can handle conjoined VP's
 Handled sentences with basic negation.
 Implemented improved, but still imperfect post-processing.
 Cleaned up the structure of the code.
@@ -114,14 +115,15 @@ def test_aux(tree):
 
 # Gets the main verb when there are no auxilliaries.
 # Finds VB's that directly descend from the root by ROOT < S < VP < main
-def get_main_verb(tree):
-    pattern = '/(VB.?)/=main > (VP > (S > ROOT))'
-    main_verb = check_output([tregex_path,
+def get_main_verbs(tree):
+    pattern = '/(VB.?)/=main >+ (VP) (S > ROOT)'
+    main_verbs = check_output([tregex_path,
                     '-s',
                     pattern,
                     init_tree_file])
-    main_verb = Tree.fromstring(main_verb)
-    return main_verb
+    main_verbs = main_verbs.split('\n')[:-1]
+    main_verbs = [Tree.fromstring(main_verb) for main_verb in main_verbs]
+    return main_verbs
 
 
 # Changes main verb to bare form.
@@ -175,11 +177,14 @@ def move_aux(tree):
 # clause and changes the main verb to its bare form. 
 def move_no_aux(tree):
     # Still need to account for cases where there is no obvious unique MV
+    '''
     try:
-        main_verb = get_main_verb(tree)
+        main_verbs = get_main_verb(tree)
     except:
         return tree
-    pos = main_verb.label()
+    '''
+    main_verbs = get_main_verbs(tree)
+    pos = main_verbs[0].label()
     do_form = tag_aux_map[pos]
     pattern = 'ROOT <: S=clause'
     transformed_treestr = check_output([tsurgeon_path,
@@ -190,7 +195,8 @@ def move_no_aux(tree):
                                 pattern,
                                 'insert (%s %s) $+ clause' % (pos, do_form)])
     tree = Tree.fromstring(transformed_treestr)
-    fix_inflection(tree, main_verb) 
+    for main_verb in main_verbs:
+        fix_inflection(tree, main_verb) 
     return tree
 
 
