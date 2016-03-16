@@ -1,0 +1,3 @@
+ROOT=root < (SQ < (/(MD|VB.?)/ .. (VP < AUX=target)))
+
+excise target target

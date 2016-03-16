@@ -1,0 +1,3 @@
+ROOT=root < (SQ=question < (/(MD|VB.?)/=aux .. (VP=mainvp < /VB.?/=verb & !> VP)))
+
+adjoin (VP (AUX) (VP@)) mainvp

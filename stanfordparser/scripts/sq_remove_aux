@@ -1,0 +1,3 @@
+ROOT=root < (SQ=question < (/VB.?/=aux .. VP))
+
+delete aux

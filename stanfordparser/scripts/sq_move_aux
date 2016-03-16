@@ -1,0 +1,3 @@
+ROOT=root < (SQ=question < (/(MD|VB.?)/=aux .. (VP < AUX=target)))
+
+move aux >1 target

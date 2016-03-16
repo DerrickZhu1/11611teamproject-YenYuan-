@@ -1,0 +1,1 @@
+java -cp //stanford-parser.jar -mx100m edu.stanford.nlp.process.DocumentPreprocessor /pathTo/fileToParse > /pathTo/resultFile 2>/dev/null
