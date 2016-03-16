@@ -26,7 +26,7 @@ def insert_aux(node, mainvb, aux):
             if c == mainvb:
                 ori = c[0]
                 c.remove(ori)
-                c.insert(0, lemmatizer.lemmatize(ori, 'v'))
+                c.insert(0, lemmatizer.lemmatize_verb(ori, 'v'))
             if c.height() > 2:
                 insert_aux(c, mainvb, aux)
 
@@ -38,17 +38,14 @@ initial_tree = parser.raw_parse(s).next()
 
 check_aux = tree_util.has_aux(initial_tree)
 if check_aux:
-    print("The sentence already has an auxiliary verb.")
-    qtree = initial_tree
+    qtree = Tree.fromstring(tree_util.inverse_aux(initial_tree))
 else:
     # decompose verb
-    print("The sentence doesn't have an auxiliary verb.")
-    print("Decompose verb...")
     aux_marked_treestr = tree_util.insert_aux_node(initial_tree)
     mainvb = Tree.fromstring(tree_util.get_main_verb(aux_marked_treestr))
     tree_with_aux_node = Tree.fromstring(aux_marked_treestr)
     insert_aux(tree_with_aux_node, mainvb, aux_map[mainvb.label()])
-    qtree = tree_with_aux_node
+    qtree = Tree.fromstring(tree_util.inverse_aux(tree_with_aux_node))
 
 print("\nQuestion:")
 print(" ".join(qtree.leaves()))
