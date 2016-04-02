@@ -1,0 +1,169 @@
+ADJP -> JJ 1
+ADVP -> RB 3
+NP -> CC NNP NNP CC NNP 1
+NP -> CD NNS 2
+NP -> DT JJ NN 3
+NP -> DT NN 10
+NP -> DT NNP 1
+NP -> DT NNP NNP 2
+NP -> JJ NNS 1
+NP -> NNP 20
+NP -> NNP CC NNP 1
+NP -> NNP NN 1
+NP -> NNP NNP 1
+NP -> NNS 1
+NP -> NP , NP 1
+NP -> NP , NP , 1
+NP -> NP PP 1
+NP -> NP SBAR 2
+NP -> PRP 9
+NP -> PRP$ NN 2
+PP -> IN NP 9
+PP -> TO NP 4
+ROOT -> S 22
+ROOT -> SBARQ 3
+ROOT -> SQ 2
+S -> NP VP 6
+S -> NP VP . 19
+S -> S VP . 1
+S -> SBAR , NP VP . 1
+S -> VP 3
+S -> VP . 1
+SBAR -> IN S 2
+SBAR -> S 1
+SBAR -> WHADVP S 1
+SBAR -> WHNP S 3
+SBARQ -> WHADVP SQ . 1
+SBARQ -> WHNP SQ . 2
+SQ -> VBP NP VP . 2
+SQ -> VBZ NP VP 3
+VP -> MD VP 6
+VP -> VB 5
+VP -> VB ADVP 1
+VP -> VB ADVP SBAR 1
+VP -> VB NP 1
+VP -> VB PP 1
+VP -> VB RB VP 1
+VP -> VB S 1
+VP -> VB VP 5
+VP -> VBD NP 1
+VP -> VBD PP 3
+VP -> VBD SBAR 1
+VP -> VBD VP 1
+VP -> VBG NP PP 1
+VP -> VBG PP 4
+VP -> VBN 2
+VP -> VBN PP 2
+VP -> VBN VP 2
+VP -> VBP PP 1
+VP -> VBP SBAR 1
+VP -> VBP VP 1
+VP -> VBZ 4
+VP -> VBZ ADJP 1
+VP -> VBZ NP 6
+VP -> VBZ SBAR 1
+VP -> VP CC ADVP VP 1
+VP -> VP CC VP 1
+WHADVP -> WRB 2
+WHNP -> WDT 1
+WHNP -> WP 4
+, -> , 4
+. -> ! 2
+. -> . 20
+. -> ? 5
+CC -> and 2
+CC -> neither 1
+CC -> nor 1
+CC -> or 1
+CD -> eight 1
+CD -> five 1
+DT -> a 4
+DT -> either 1
+DT -> that 1
+DT -> the 10
+IN -> at 1
+IN -> because 1
+IN -> by 2
+IN -> for 1
+IN -> from 1
+IN -> near 1
+IN -> of 1
+IN -> that 1
+IN -> with 2
+JJ -> hard 1
+JJ -> sixty 1
+JJ -> tiny 1
+JJ -> trusty 1
+JJ -> yellow 1
+MD -> might 2
+MD -> should 1
+MD -> will 3
+NN -> castle 3
+NN -> chalice 1
+NN -> fruit 1
+NN -> home 1
+NN -> horse 1
+NN -> king 5
+NN -> ride 1
+NN -> servant 1
+NN -> story 1
+NN -> swallow 1
+NNP -> Arthur 12
+NNP -> Camelot 3
+NNP -> England 1
+NNP -> Grail 1
+NNP -> Guinevere 4
+NNP -> Holy 1
+NNP -> Lancelot 2
+NNP -> Patsy 3
+NNP -> Round 1
+NNP -> Sir 2
+NNP -> Table 1
+NNP -> Zoot 2
+NNS -> coconuts 1
+NNS -> inches 1
+NNS -> nights 1
+NNS -> strangers 1
+PRP -> he 1
+PRP -> it 2
+PRP -> she 1
+PRP -> they 5
+PRP$ -> his 2
+RB -> Patsy 1
+RB -> frequently 1
+RB -> not 1
+RB -> precisely 1
+TO -> to 4
+VB -> be 2
+VB -> carry 1
+VB -> do 1
+VB -> grow 1
+VB -> have 4
+VB -> migrate 2
+VB -> ride 1
+VB -> speak 3
+VB -> suggest 1
+VBD -> drank 2
+VBD -> rode 1
+VBD -> suggested 1
+VBD -> was 2
+VBG -> covering 1
+VBG -> riding 3
+VBG -> suggesting 1
+VBN -> been 2
+VBN -> carried 2
+VBN -> covered 1
+VBN -> known 1
+VBP -> are 3
+VBP -> do 1
+VBP -> know 1
+VBZ -> does 4
+VBZ -> drinks 2
+VBZ -> is 4
+VBZ -> knows 4
+VBZ -> rides 1
+WDT -> that 1
+WP -> what 2
+WP -> who 2
+WRB -> when 1
+WRB -> why 1

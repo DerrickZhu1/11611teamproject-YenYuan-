@@ -1,0 +1,8 @@
+(ROOT
+  (SQ
+    (VBP Are)
+    (NP (PRP we))
+    (VP
+      (VBG working)
+      (PP (IN on) (NP (DT the) (JJ final) (NN project))))
+    (. ?)))

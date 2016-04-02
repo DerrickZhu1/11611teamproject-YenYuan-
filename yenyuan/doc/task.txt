@@ -1,0 +1,7 @@
+Question generation:
+1. 'wh' question => Lu Xin
+2. Preprocessing => Brock
+
+Question answering:
+1. Locate potential sentence as the answer => Bin
+2. High-level design of the system => Zhong

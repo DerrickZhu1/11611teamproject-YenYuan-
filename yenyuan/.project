@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>yenyuan</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.python.pydev.PyDevBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.python.pydev.pythonNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>scripts/gui_tregex.sh</name>
+			<type>1</type>
+			<location>/Users/zhongzhu/Documents/code/11611teamproject-YenYuan-/stanfordparser/lib/stanford-tregex-2015-12-09/gui_tregex.sh</location>
+		</link>
+		<link>
+			<name>scripts/lib.tregex.sh</name>
+			<type>1</type>
+			<location>/Users/zhongzhu/Documents/code/11611teamproject-YenYuan-/stanfordparser/lib/stanford-tregex-2015-12-09/tregex.sh</location>
+		</link>
+		<link>
+			<name>scripts/lib.tsurgeon.sh</name>
+			<type>1</type>
+			<location>/Users/zhongzhu/Documents/code/11611teamproject-YenYuan-/stanfordparser/lib/stanford-tregex-2015-12-09/tsurgeon.sh</location>
+		</link>
+	</linkedResources>
+</projectDescription>
