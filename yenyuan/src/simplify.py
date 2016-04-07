@@ -1,7 +1,9 @@
 '''
-Created on April 2, 2016
+Created on April 7, 2016
 
 @author: Brock Sennish
+
+VERY ROUGH AND INEFFICIENT!!!
 '''
 
 '''
