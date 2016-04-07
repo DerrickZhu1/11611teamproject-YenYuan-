@@ -12,7 +12,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tree import Tree
 
 from article import Article
-import tree_util
+import script_wrapper
 
 
 lemmatizer = WordNetLemmatizer()
@@ -50,8 +50,8 @@ with open("../temp/a1.txt") as t:
 
 s = stdin.readline()
 initial_tree = parser.raw_parse(s).next()
-stmt_tree_1 = tree_util.remove_aux(initial_tree)
-stmt_tree_2 = tree_util.revert_aux(initial_tree)
+stmt_tree_1 = script_wrapper.remove_aux(initial_tree)
+stmt_tree_2 = script_wrapper.revert_aux(initial_tree)
 stmt1 = clean(" ".join(lemmatize_verb(Tree.fromstring(stmt_tree_1)).leaves()))
 stmt2 = clean(" ".join(lemmatize_verb(Tree.fromstring(stmt_tree_2)).leaves()))
 
