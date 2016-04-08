@@ -4,8 +4,8 @@ Created on Mar 16, 2016
 @author: zhongzhu
 '''
 
-
-import stanford_parser
+import util
+import script_wrapper as stanford_parser
 
 
 class Article(object):
@@ -13,7 +13,7 @@ class Article(object):
         self.raw_content = r
     
     def paragraphs(self):
-        return self.raw_content.replace("\n\n", "\n").split("\n")
+        return self.raw_content.split("\n")
     
     def sentences(self):
         sentences = []
@@ -22,3 +22,9 @@ class Article(object):
                 r = stanford_parser.preprocess(line)
                 sentences.extend(r.split('\n'))
         return sentences
+    
+    
+with open("../temp/a_.txt") as f:
+    article = Article(f.read())
+    print("\n".join(article.sentences()))
+    util.timer_log("preprocesss")
