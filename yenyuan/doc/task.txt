@@ -4,4 +4,8 @@ Question generation:
 
 Question answering:
 1. Locate potential sentence as the answer => Bin
-2. High-level design of the system => Zhong
+done 2. High-level design of the system => Zhong
+3. Pronoun resolution
+4. Clean the article and provide input for "gen_question"
+5. Integrate Zhu Bin's change
+6. Integrate the system.
