@@ -30,15 +30,14 @@ from nltk.parse.stanford import StanfordParser
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tree import Tree
 
-import script_wrapper
+import script_wrapper as tsurgeon
+import script_wrapper as stanford_parser
 
 
 tag_aux_map = {"VBD": "did", "VB": "do", "VBZ": "does", "VBP": "do"}
 
 
-parser_path = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz"
-
-parser = StanfordParser(model_path=parser_path)
+parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to_models_jar=stanford_parser.stanford_model_jar)
 lemmatizer = WordNetLemmatizer()
 # embedded = []
 
@@ -73,14 +72,14 @@ def save_embedded_clause(tree):
 def remove_negation(tree):
     words = tree.leaves()
     if 'not' in words or 'n\'t' in words:
-        tree = script_wrapper.remove_negation(tree)
+        tree = tsurgeon.remove_negation(tree)
     return tree
 
 
 # Gets the main verb when there are no auxilliaries.
 # Finds VB's that directly descend from the root by ROOT < S < VP < main
 def get_main_verbs(tree):
-    main_verbs = script_wrapper.get_main_verbs(tree).split('\n')[:-1]
+    main_verbs = tsurgeon.get_main_verbs(tree).split('\n')[:-1]
     main_verbs = [Tree.fromstring(main_verb) for main_verb in main_verbs]
     return main_verbs
 
@@ -113,7 +112,7 @@ def move_no_aux(tree):
     main_verbs = get_main_verbs(tree)
     pos = main_verbs[0].label()
     do_form = tag_aux_map[pos]
-    transformed_treestr = script_wrapper.insert_do(tree, pos, do_form)
+    transformed_treestr = tsurgeon.insert_do(tree, pos, do_form)
     tree = Tree.fromstring(transformed_treestr)
     for main_verb in main_verbs:
         fix_inflection(tree, main_verb) 
@@ -154,25 +153,24 @@ def fix_output(tree):
 
 
 def main():
-    print("Enter a simple declarative sentence:")
-    inputstr = sys.stdin.readline()
     while True:  # Just do a keyboard interrupt to exit the loop.
+        print("\nEnter a simple declarative sentence:")
+        inputstr = sys.stdin.readline()
         main_tree = parser.raw_parse(inputstr).next()
         '''
         main_tree_str = save_embedded_clause(main_tree_str)
         print(main_tree_str)
         '''
         main_tree_str = remove_negation(main_tree)
-        if script_wrapper.test_aux(main_tree_str):
-            main_tree_str = script_wrapper.mark_aux(main_tree_str)
-            main_tree_str = script_wrapper.move_aux(main_tree_str)
+        if tsurgeon.test_aux(main_tree_str):
+            main_tree_str = tsurgeon.mark_aux(main_tree_str)
+            main_tree_str = tsurgeon.move_aux(main_tree_str)
         else:
             main_tree_str = move_no_aux(main_tree_str)
         main_tree = Tree.fromstring(main_tree_str)
         print("\nQUESTION:")
         print(fix_output(main_tree))
-        print("\nEnter a simple declarative sentence:")
-        inputstr = sys.stdin.readline()
+
 
 
 if __name__ == "__main__":
