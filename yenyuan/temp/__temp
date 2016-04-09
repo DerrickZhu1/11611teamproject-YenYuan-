@@ -1,8 +1,1 @@
-(ROOT
-  (SQ
-    (VBP Are)
-    (NP (PRP we))
-    (VP
-      (VBG working)
-      (PP (IN on) (NP (DT the) (JJ final) (NN project))))
-    (. ?)))
+(ROOT (S (NP (NNP Dempsey)) (VP (VP (VBD studied) (NP (NP (DT the) (NN play)) (PP (IN of) (NP (NP (NP (NNP Argentina) (POS 's)) (JJ national) (NN team)) (, ,) (RB especially) (NP (NNP Diego) (NNP Maradona)))))) (, ,) (CC and) (VP (VBD was) (VP (VBN heartbroken) (SBAR (WHADVP (WRB when)) (S (NP (DT the) (NN news)) (VP (VBD came) (PP (TO to) (NP (NNP Nacogdoches))) (SBAR (IN that) (S (NP (NNP Maradona)) (VP (MD would) (VP (VB be) (VP (VBG playing) (PP (IN in) (NP (NP (DT the) (CD 1994) (NNP World) (NNP Cup) (NN game)) (VP (VBN played) (PP (IN in) (NP (DT the) (NNP Cotton) (NNP Bowl))))))))))))))))) (. .)))
