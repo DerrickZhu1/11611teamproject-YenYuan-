@@ -30,8 +30,8 @@ from nltk.parse.stanford import StanfordParser
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tree import Tree
 
-import script_wrapper as tsurgeon
 import script_wrapper as stanford_parser
+import script_wrapper as tsurgeon
 
 
 tag_aux_map = {"VBD": "did", "VB": "do", "VBZ": "does", "VBP": "do"}
@@ -152,25 +152,30 @@ def fix_output(tree):
     return " ".join(detokenize(words))
 
 
+
+def question(inputstr):
+    main_tree = parser.raw_parse(inputstr).next()
+    '''
+    main_tree_str = save_embedded_clause(main_tree_str)
+    print(main_tree_str)
+    '''
+    main_tree_str = remove_negation(main_tree)
+    if tsurgeon.test_aux(main_tree_str):
+        main_tree_str = tsurgeon.mark_aux(main_tree_str)
+        main_tree_str = tsurgeon.move_aux(main_tree_str)
+    else:
+        main_tree_str = move_no_aux(main_tree_str)
+    main_tree = Tree.fromstring(main_tree_str)
+    question = fix_output(main_tree)
+    return question
+
 def main():
     while True:  # Just do a keyboard interrupt to exit the loop.
         print("\nEnter a simple declarative sentence:")
         inputstr = sys.stdin.readline()
-        main_tree = parser.raw_parse(inputstr).next()
-        '''
-        main_tree_str = save_embedded_clause(main_tree_str)
-        print(main_tree_str)
-        '''
-        main_tree_str = remove_negation(main_tree)
-        if tsurgeon.test_aux(main_tree_str):
-            main_tree_str = tsurgeon.mark_aux(main_tree_str)
-            main_tree_str = tsurgeon.move_aux(main_tree_str)
-        else:
-            main_tree_str = move_no_aux(main_tree_str)
-        main_tree = Tree.fromstring(main_tree_str)
+        q = question(inputstr)
         print("\nQUESTION:")
-        print(fix_output(main_tree))
-
+        print(q)
 
 
 if __name__ == "__main__":

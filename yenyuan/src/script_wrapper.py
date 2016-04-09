@@ -14,7 +14,7 @@ tregex_class_path = tregex_path + 'stanford-tregex.jar:' + tregex_path + 'lib/*'
 
 # use this method to write the string to a temp file before use the script
 def write_to_temp(tree):
-    temp_file = "__temp"
+    temp_file = "../temp/__temp"
     with open(temp_file, "w+") as f:
         f.write(str(tree))
         f.close()
@@ -114,6 +114,9 @@ stanford_parser_jar = '../lib/stanford-parser-full-2015-04-20/stanford-parser.ja
 stanford_model_jar = '../lib/stanford-parser-full-2015-04-20/stanford-parser-3.5.2-models.jar'
 document_preprocessor = 'edu.stanford.nlp.process.DocumentPreprocessor'
 
+'''
+tokenize
+'''
 def preprocess(paragraph):
     f = write_to_temp(paragraph)
     return check_output(['java', '-cp', stanford_parser_jar, '-mx100m', document_preprocessor, f], stderr=DEVNULL)

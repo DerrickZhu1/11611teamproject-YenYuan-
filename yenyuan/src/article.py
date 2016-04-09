@@ -4,8 +4,9 @@ Created on Mar 16, 2016
 @author: zhongzhu
 '''
 
-import util
-import script_wrapper as stanford_parser
+import string
+
+from nltk.tokenize import sent_tokenize
 
 
 class Article(object):
@@ -17,14 +18,19 @@ class Article(object):
     
     def sentences(self):
         sentences = []
-        for line in self.raw_content.split("\n"):
-            if line:
-                r = stanford_parser.preprocess(line)
-                sentences.extend(r.split('\n'))
+        for line in self.paragraphs():
+            if line and line.endswith('.'):
+                printable = set(string.printable)
+                line = filter(lambda x: x in printable, line)
+                cleaned = sent_tokenize(line)
+                sentences.extend(cleaned)
         return sentences
     
     
-with open("../temp/a_.txt") as f:
-    article = Article(f.read())
-    print("\n".join(article.sentences()))
-    util.timer_log("preprocesss")
+def test():
+    with open("../temp/all.sen", "w+") as t:
+        for i in range(1, 10):
+            file_name = "../data/set1/a" + str(i) + ".txt"
+            with open(file_name) as f:
+                article = Article(f.read())
+                t.write("\n".join(article.sentences()))
