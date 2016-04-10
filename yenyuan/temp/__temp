@@ -1,14 +1,1 @@
-(ROOT
-  (S
-    (, ,)
-    (NP (PRP he))
-    (VP
-      (VBD started)
-      (SBAR
-        (S
-          (NP (NP (CD 23)) (PP (IN of) (NP (CD 24))))
-          (VP
-            (VBZ matches)
-            (NP (VBG scoring) (NP (CD seven) (NNS goals))))))
-      (PP (IN In) (NP (PRP$ his) (NN rookie) (NN season))))
-    (. .)))
+(ROOT (S (NP (NNP John)) (VP (VBZ is) (NP (DT a) (NN man))) (. .)))

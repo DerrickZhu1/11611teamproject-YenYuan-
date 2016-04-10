@@ -141,17 +141,17 @@ def hasSubjFMV(tree):
     return True
 
 # removes non-restrictive appositives and relative clauses that modify
-# the subject NP
+# any NP in the sentence (KEEP AN EYE OUT FOR ISSUES)
 def remove_internal_mods(tree):
     f = write_to_temp(tree)
-    pattern = '/NP|SBAR/=mod > (NP > (S > ROOT)) !>1 NP'
+    pattern = '/NP|SBAR/=mod > NP !>1 NP'
     return tsurgeon(f, pattern, 'delete mod')
     
 
-# removes participle phrases that modify the subject NP
+# removes participle phrases that modify the any NP (LOOK FOR ISSUES)
 def remove_participle_mods(tree):
     f = write_to_temp(tree)
-    pattern = 'S=mod > (S > ROOT) $ NP $ VP < (VP < VBG)'
+    pattern = 'S=mod $ NP < (VP < VBG)'
     return tsurgeon(f, pattern, 'delete mod')
 
 

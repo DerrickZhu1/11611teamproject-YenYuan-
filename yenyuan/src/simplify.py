@@ -188,7 +188,7 @@ def simplify_sen(sent):
 
 
 def main():
-    sent = "Torcetrapib, a drug that increases production of HDL, or \"good cholesterol\", reduces LDL thought to be correlated to heart disease."
+    sent = "John, a man, killed Mary, a woman."
     tree = parser.raw_parse(sent).next()
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation
