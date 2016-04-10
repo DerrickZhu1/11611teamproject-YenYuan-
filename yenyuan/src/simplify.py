@@ -188,7 +188,7 @@ def simplify_sen(sent):
 
 
 def main():
-    sent = "John, a man, killed Mary, a woman."
+    sent = "Dempsey played for Premier League team Fulham and is the club 's highest Premier League goalscorer of all time Between 2007 and 2012."
     tree = parser.raw_parse(sent).next()
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation
