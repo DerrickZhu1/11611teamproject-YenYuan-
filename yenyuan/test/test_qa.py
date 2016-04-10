@@ -4,11 +4,12 @@ Created on Apr 9, 2016
 @author: zhongzhu
 '''
 
+import traceback
+
 from answer import yes_or_no
 from article import Article
 from gen_question import question
 from simplify import simplify_sen
-import traceback
 
 
 with open("../data/set1/a1.txt") as f:
