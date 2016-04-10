@@ -1,0 +1,35 @@
+coding:
+ne_tuple = st.tag(sents[-1].split()) ###need write interface for tokenized sent (http://nlp.stanford.edu/software/crf-faq.shtml#tokenized)
+
+####### my issue here: 1. don't know how to get NP. 2. is there a quicker way to find PERON ?
+
+
+simplify:
+sb who plays for Seattle Sounders FC in Major League Soccer and has served as the captain of the United States national team.
+
+Dempsey played for Premier League team Fulham and (find ) is the club's highest Premier League goalscorer of all time.
+
+Dempsey played for one of the top youth soccer clubs in the state,(???) the Dallas Texans, before playing for Furman University's men's soccer team. (where, special)
+
+can you tackle this ?
+
+
+preprocessing:
+Clinton Drew "Clint" Dempsey /ˈdɛmpsi/ (born March 9, 1983) is an American professional soccer player who plays for Seattle Sounders FC in Major League Soccer and has served as the captain of the United States national team.
+()
+
+use: # -*- coding: utf-8 -*- ### top for UTF-8 !!!, but get errors: "UnicodeDecodeError: 'ascii' codec can't decode byte 0xcb in position 30: ordinal not in range(128)". So how to detact whether the sentence can be parse?
+
+
+pronoun reference:
+he would eventually score 25 goals in 71 appearances with the Revolution. (escape pronoun, not so rights)
+
+grammar:
+His older brother Ryan was offered a tryout for the Dallas Texans (special, not where, must pp, prep must be like:
+in,at,on,between,under,behind,upon,outside,above,across,inside,toward,into,up,near,through (as)
+to (leave 'to' in the prep position)
+from,over (###questoins) at question tail add prep or not ???
+)
+
+
+how to clone ???

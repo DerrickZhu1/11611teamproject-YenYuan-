@@ -1,0 +1,82 @@
+(who just head)
+
+Dempsey played for one of the top youth soccer clubs in the state, the Dallas Texans, before playing for Furman University's men's soccer team. (where, crash)
+
+In 2004, Dempsey was drafted by Major League Soccer club New England Revolution. (what)
+		(PP
+          (IN by)
+          (NP
+            (NNP Major)
+            (NNP League)
+            (NN Soccer)
+            (NN club)
+            (NNP New)
+            (NNP England)
+            (NNP Revolution)))))
+
+Between 2007 and 2012, Dempsey played for Premier League team Fulham. (what)
+
+he would eventually score 25 goals in 71 appearances with the Revolution. (escape pronoun)
+
+Dempsey became the first American player to score a hat-trick in the English Premier League (where)
+
+Dempsey first represented the United States at the 2003 FIFA World Youth Championship (what) (only FIFA is Organization, combine NP, consider the whole as a part. Note, if non 'of', small NP)
+(ROOT
+  (S
+    (NP (NNP Dempsey))
+    (VP
+      (ADVP (RB first))
+      (VBD represented)
+      (NP (DT the) (NNP United) (NNPS States))
+      (PP
+        (IN at)
+        (NP
+          (DT the)
+          (CD 2003)
+          (NNP FIFA)
+          (NNP World)
+          (NNP Youth)
+          (NNP Championship))))))
+
+he helped them to the final of the 2009 FIFA Confederations Cup (what) (only FIFA is Organization, combine NP, consider the whole as a part. Note, if 'of', the largest NP)
+(ROOT
+  (S
+    (NP (PRP he))
+    (VP
+      (VBD helped)
+      (NP (PRP them))
+      (PP
+        (TO to)
+        (NP
+          (NP (DT the) (JJ final))
+          (PP
+            (IN of)
+            (NP
+              (DT the)
+              (NNP 2009)
+              (NNP FIFA)
+              (NNPS Confederations)
+              (NNP Cup))))))))
+
+Dempsey was born in Nacogdoches(where)
+
+His older brother Ryan was offered a tryout for the Dallas Texans (special, not where, must pp, prep must be like: 
+in,at,on,between,under,behind,upon,outside,above,across,inside,toward,into,up,near, (as)
+to,from,through,over,(###questoins, not tackle now)
+)
+
+New England Revolution selected Clint Dempsey eighth overall in the 2004 MLS SuperDraft. (what head)
+
+cat helped the Revolution for the Eastern Conference Finals (though not rec by ner, if did so: use first Location or Organization to ask)
+
+
+
+(though available, don't ask now, can be done in the future):
+he was honored with the MVP of the Tampa Bay Sun Bowl tournament.
+He attended Furman University as a health and exercise science major and a key player for Paladins(location) soccer.
+to,from,over,(###questoins, not tackle now)
+through,(don consider?)
+
+
+
+
