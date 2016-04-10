@@ -104,7 +104,11 @@ def revert_aux(tree):
                                   '../scripts/sq_excise_target'])
     return inversed_tree
 
-
+# returns the subject NP of a sentence
+def findSubject(tree):
+    f = write_to_temp(tree)
+    pattern = 'NP > (S > ROOT)'
+    return tregex(f, pattern)
 
 
 ##############  stanford parser wrapper ################
