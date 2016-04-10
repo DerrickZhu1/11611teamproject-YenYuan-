@@ -123,12 +123,45 @@ def hasSubordinateClause(tree):
 def moveLeadingPP(tree):
     f = write_to_temp(tree)
     pattern = '/PP/=lead > (S > ROOT) $ (/VP/=main)'
-    has_leading_pp = tregex(f, pattern)
-    print("has leading PP: ", has_leading_pp)
-    # LEAVES COMMA IN FRONT, if there
-    moved_pp_treestr = tsurgeon(f, pattern, 'move lead >-1 main')
-    print("moved: ", moved_pp_treestr)
-    return moved_pp_treestr 
+    return tsurgeon(f, pattern, 'move lead >-1 main')
+
+
+# returns participle modifier if it's there
+def hasParticipleMod(tree):
+    f = write_to_temp(tree)
+    pattern = 'S=mod > (S > ROOT) $ NP $ VP < (VP < VBG)'
+    return tregex(f, pattern)
+
+
+# checks whether the tree has a subject and finite main verb
+def hasSubjFMV(tree):
+    f = write_to_temp(tree)
+    pattern = 'ROOT < (S < (NP $ VP))'
+    if tregex(f, pattern) == '':
+        return False
+    return True
+
+# removes non-restrictive appositives and relative clauses that modify
+# the subject NP
+def remove_internal_mods(tree):
+    f = write_to_temp(tree)
+    pattern = '/NP|SBAR/=mod > (NP > (S > ROOT)) !>1 NP'
+    return tsurgeon(f, pattern, 'delete mod')
+    
+
+# removes participle phrases that modify the subject NP
+def remove_participle_mods(tree):
+    f = write_to_temp(tree)
+    pattern = 'S=mod > (S > ROOT) $ NP $ VP < (VP < VBG)'
+    return tsurgeon(f, pattern, 'delete mod')
+
+
+# removes leading modifiers to the subject NP
+def remove_leading_mods(tree):
+    f = write_to_temp(tree)
+    pattern = '/.?/=mod $+ NP > (S > ROOT)'
+    return tsurgeon(f, pattern, 'delete mod')
+
 
 
 ##############  stanford parser wrapper ################
