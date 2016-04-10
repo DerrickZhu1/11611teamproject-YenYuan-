@@ -1,9 +1,6 @@
 '''
 Created on April 9, 2016
 @author: Brock Sennish
-
-cleaned up
-still incomplete
 '''
 
 import nltk
@@ -43,9 +40,10 @@ def extractHelper(tree):
     return result
         
     
-## Extraction Functions ##
+## EXTRACTION FUNCTIONS ##
 
 
+# Returns all extracted sentences from main sentence.
 def getExtractions(tree):
     result = []
     extractFunctions = [extractNonResMod, extractSubClause, extractParticiple]
@@ -56,8 +54,12 @@ def getExtractions(tree):
     return result
 
 
+# Extracts sentences for non-restrictive appositives and relative clauses
+# that modify the subject. (generating sentences from other modifiers leads to
+# problem cases. 
 def extractNonResMod(tree):
     subject = tsurgeon.findSubject(tree)
+    print(subject)
     sub_tree = Tree.fromstring(subject)
     tokens = sub_tree.leaves()
     parts = ' '.join(tokens).split(',')
@@ -72,13 +74,24 @@ def extractNonResMod(tree):
             return sentence
         # check if it is a relative clause
         elif phrase_type == 'SBAR':
+            # CONSTRAINTS:
+            # fails for relative clauses with adjunct gaps
+            # assumes we don't have a subordinate clause - need case for this
             substitution = [main_subject.rstrip()] + parts[1].split()[1:]
             sentence = ' '.join(substitution).rstrip() + '.'
             return sentence
     pass
     
 
+# Extracts a sentence from a subordinate clause.
 def extractSubClause(tree):
+    sub_clause = tsurgeon.hasSubordinateClause(tree)
+    if sub_clause != '':
+        sub_tree = Tree.fromstring(sub_clause)
+        words = sub_tree.leaves()
+        if words[0].lower() != 'if':
+            sentence = ' '.join(words[1:]).strip() + '.'
+            return sentence
     pass
     
 
@@ -90,7 +103,7 @@ def extractConjuncts(tree):
     pass
 
 
-## Removal Functions ##
+## REMOVAL FUNCTIONS ##
 
 
 def removeNounMods(tree):
@@ -105,7 +118,7 @@ def removeLeadingMods(tree):
     pass
 
 
-## Tree Property Functions ##
+## TREE PROPERTY FUNCTIONS ##
 
 
 def hasConjuncts(tree):
@@ -116,10 +129,16 @@ def hasSubjFMV(tree):
     pass    
 
 
-## Others ##
+## OTHERS ##
 
 
 def movePP(tree):
+    # Temporary condition
+    if type(tree) == str:
+        pass
+    moved_pp_treestr = tsurgeon.moveLeadingPP(tree)
+    if moved_pp_treestr != '':
+        return Tree.fromstring(moved_pp_treestr)
     pass
 
 
@@ -131,7 +150,7 @@ def getTag(string, tree):
 
 
 def main():
-    sent = "Jefferson, who was the third president, owned slaves."
+    sent = "In 2000, Bush, the governor of Texas, won the election."
     tree = parser.raw_parse(sent).next()
     extractSimplifiedSentences(tree)
 
