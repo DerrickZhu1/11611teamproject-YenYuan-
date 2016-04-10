@@ -59,7 +59,6 @@ def getExtractions(tree):
 def extractNonResMod(tree):
     subject = tsurgeon.findSubject(tree)
     sub_tree = Tree.fromstring(subject)
-    print(sub_tree)
     tokens = sub_tree.leaves()
     parts = ' '.join(tokens).split(',')
     main_subject = parts[0]
