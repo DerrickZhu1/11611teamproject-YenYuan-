@@ -22,14 +22,13 @@ def write_to_temp(tree):
 
 # call tsurgeon in java
 def tsurgeon(tree_file=None, pattern=None, op=None, script=None):
+    params = ['java', '-mx100m', '-classpath', tregex_class_path,
+              'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon', '-treeFile', tree_file, '-s'] 
     if pattern and op:
-        return check_output(['java', '-mx100m', '-classpath', tregex_class_path,
-                  'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon',
-                  '-treeFile', tree_file, '-s', '-po', pattern, op], stderr=DEVNULL)
+        params.extend(['-po', pattern, op])
     else:
-        return check_output(['java', '-mx100m', '-classpath', tregex_class_path,
-                  'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon',
-                  '-treeFile', tree_file, '-s', script, op], stderr=DEVNULL)
+        params.extend(script)
+    return check_output(params, stderr=DEVNULL)
 
 # call tregex in java
 def tregex(tree_file=None, pattern=None):
@@ -93,7 +92,7 @@ def insert_do(tree, pos, do_form):
 # remove the auxiliary verb in front
 def remove_aux(tree):
     f = write_to_temp(tree)
-    inversed_tree = tsurgeon(tree_file=f, script='../scripts/sq_remove_aux')
+    inversed_tree = tsurgeon(tree_file=f, script=['../scripts/sq_remove_aux'])
     return inversed_tree
 
 # from question to statement
