@@ -43,10 +43,11 @@ def yes_or_no(statement, question):
             return False
     return True
 
-# question = "Did he start 23 of 24 matches scoring seven goals?"
+# question = "Has he also played for New England Revolution Fulham and Tottenham Hotspur?"
+# sentence = "He has also played for New England Revolution Fulham and Tottenham Hotspur"
 # print("\nThe question is: \n\t" + question)
 # print("Our answer is: ")
-# if yes_or_no("In his rookie season, he started 23 of 24 matches scoring seven goals.", question):
+# if yes_or_no(sentence, question):
 #     print("yes")
 # else: 
 #     print("no")

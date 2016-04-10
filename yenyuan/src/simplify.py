@@ -19,12 +19,12 @@ import string
 parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to_models_jar=stanford_parser.stanford_model_jar)
 
 
-## MAIN ALGORITHM ##
+# # MAIN ALGORITHM ##
 
 
 def extractSimplifiedSentences(tree):
     result = []
-    extracted = [tree] + getExtractions(tree) # <- a list of extractions
+    extracted = [tree] + getExtractions(tree)  # <- a list of extractions
     for t in extracted:
         if isinstance(t, str):
             t = parser.raw_parse(t).next()
@@ -48,7 +48,7 @@ def extractHelper(tree):
     return result
         
     
-## EXTRACTION FUNCTIONS ##
+# # EXTRACTION FUNCTIONS ##
 
 
 # Returns all extracted sentences from main sentence.
@@ -120,7 +120,7 @@ def extractConjuncts(tree):
     pass
 
 
-## REMOVAL FUNCTIONS ##
+# # REMOVAL FUNCTIONS ##
 
 
 def removeNounMods(tree):
@@ -147,7 +147,7 @@ def removeLeadingMods(tree):
     
 
 
-## TREE PROPERTY FUNCTIONS ##
+# # TREE PROPERTY FUNCTIONS ##
 
 
 def hasConjuncts(tree):
@@ -155,7 +155,7 @@ def hasConjuncts(tree):
     
 
 
-## OTHERS ##
+# # OTHERS ##
 
 
 def movePP(tree):
@@ -173,6 +173,18 @@ def getTag(string, tree):
         if ' '.join(sub.leaves()) == string:
             return sub.label()
     return None
+
+
+def simplify_sen(sent):
+    results = []
+    tree = parser.raw_parse(sent).next()
+    result = extractSimplifiedSentences(tree)
+    punct = string.punctuation
+    for tree in result:
+        # TEMPORARY POSTPROCESSING
+        tokens = [tok for tok in tree.leaves() if tok not in punct]
+        results.append(' '.join(tokens) + '.')
+    return results
 
 
 def main():
