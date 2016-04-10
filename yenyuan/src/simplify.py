@@ -1,25 +1,33 @@
 '''
 Created on April 9, 2016
 @author: Brock Sennish
+
+ISSUES:
+Extraction from appositives is buggy - don't want to insert in the whole
+preceding NP.
 '''
 
 import nltk
 from nltk.parse.stanford import StanfordParser
-from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tree import Tree
 
 import script_wrapper as stanford_parser
 import script_wrapper as tsurgeon
 
+import string
+
 parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to_models_jar=stanford_parser.stanford_model_jar)
 
 
-# Main algorithm
+## MAIN ALGORITHM ##
+
+
 def extractSimplifiedSentences(tree):
     result = []
     extracted = [tree] + getExtractions(tree) # <- a list of extractions
-    print(extracted)
     for t in extracted:
+        if isinstance(t, str):
+            t = parser.raw_parse(t).next()
         for new in extractHelper(t):
             result.append(new)
     return result
@@ -35,7 +43,7 @@ def extractHelper(tree):
         conjuncts = extractConjuncts(tree)
         for t in conjuncts:
             result.append(t)
-    elif hasSubjFMV(tree):
+    elif tsurgeon.hasSubjFMV(tree):
         result.append(tree)
     return result
         
@@ -59,7 +67,6 @@ def getExtractions(tree):
 # problem cases. 
 def extractNonResMod(tree):
     subject = tsurgeon.findSubject(tree)
-    print(subject)
     sub_tree = Tree.fromstring(subject)
     tokens = sub_tree.leaves()
     parts = ' '.join(tokens).split(',')
@@ -96,6 +103,16 @@ def extractSubClause(tree):
     
 
 def extractParticiple(tree):
+    part_mod = tsurgeon.hasParticipleMod(tree)
+    if part_mod != '':
+        subject = tsurgeon.findSubject(tree)
+        subject_words = Tree.fromstring(subject).leaves()
+        part_tree = Tree.fromstring(part_mod)
+        part_words = part_tree.leaves()
+        # Ignoring inflection
+        result_words = subject_words + ['is'] + part_words[1:]
+        sentence = ' '.join(result_words).strip() + '.'
+        return sentence
     pass
 
 
@@ -107,15 +124,27 @@ def extractConjuncts(tree):
 
 
 def removeNounMods(tree):
-    pass
+    tree_str = tsurgeon.remove_internal_mods(tree)
+    if tree_str != '':
+        tree = Tree.fromstring(tree_str)
+    tree_str = tsurgeon.remove_participle_mods(tree)
+    if tree_str != '':
+        tree = Tree.fromstring(tree_str)
+    return tree
     
 
 def removeVerbMods(tree):
-    pass
+    return tree
 
 
 def removeLeadingMods(tree):
-    pass
+    tree_str = tsurgeon.remove_leading_mods(tree)
+    if tree_str != '':
+        new = Tree.fromstring(tree_str)
+        if new != tree:
+            return removeLeadingMods(Tree.fromstring(tree_str))
+    return tree
+    
 
 
 ## TREE PROPERTY FUNCTIONS ##
@@ -124,9 +153,6 @@ def removeLeadingMods(tree):
 def hasConjuncts(tree):
     pass
     
-    
-def hasSubjFMV(tree):
-    pass    
 
 
 ## OTHERS ##
@@ -150,9 +176,14 @@ def getTag(string, tree):
 
 
 def main():
-    sent = "In 2000, Bush, the governor of Texas, won the election."
+    sent = "Torcetrapib, a drug that increases production of HDL, or \"good cholesterol\", reduces LDL thought to be correlated to heart disease."
     tree = parser.raw_parse(sent).next()
-    extractSimplifiedSentences(tree)
+    result = extractSimplifiedSentences(tree)
+    punct = string.punctuation
+    for tree in result:
+        # TEMPORARY POSTPROCESSING
+        tokens = [tok for tok in tree.leaves() if tok not in punct]
+        print(' '.join(tokens) + '.')
 
 
 if __name__ == "__main__":
