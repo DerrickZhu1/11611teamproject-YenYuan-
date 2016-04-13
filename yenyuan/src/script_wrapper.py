@@ -107,8 +107,9 @@ def revert_aux(tree):
 # returns the subject NP of a sentence
 def findSubject(tree):
     f = write_to_temp(tree)
-    pattern = 'NP > (S > ROOT)'
-    return tregex(f, pattern)
+    pattern = 'NP > (S > ROOT) $ VP'
+    subj = tregex(f, pattern)
+    return subj
 
 
 # if a tree has a subordinate clause, returns it.
@@ -144,7 +145,7 @@ def hasSubjFMV(tree):
 # the subject NP
 def remove_internal_mods(tree):
     f = write_to_temp(tree)
-    pattern = '/NP|SBAR/=mod > (NP > (S > ROOT)) !>1 NP'
+    pattern = '/,/ $+ (/NP|SBAR/=mod > (NP > (S > ROOT)) !>1 NP)'
     return tsurgeon(f, pattern, 'delete mod')
     
 
@@ -160,6 +161,13 @@ def remove_leading_mods(tree):
     f = write_to_temp(tree)
     pattern = '/.?/=mod $+ NP > (S > ROOT)'
     return tsurgeon(f, pattern, 'delete mod')
+
+
+# checks if a tree has conjoined VP, S or SBAR
+def hasConjuncts(tree):
+    f = write_to_temp(tree)
+    pattern = 'CC=conj $+ /VP|S|SBAR/ !< /or|nor/'
+    return tregex(f, pattern)
 
 
 

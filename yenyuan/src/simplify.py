@@ -39,7 +39,8 @@ def extractHelper(tree):
     removalFunctions = [removeNounMods, removeVerbMods, removeLeadingMods]
     for remove in removalFunctions:
         tree = remove(tree)
-    if hasConjuncts(tree):
+    if tsurgeon.hasConjuncts(tree):
+        print("conjuncts")
         conjuncts = extractConjuncts(tree)
         for t in conjuncts:
             result.append(t)
@@ -146,15 +147,6 @@ def removeLeadingMods(tree):
     return tree
     
 
-
-# # TREE PROPERTY FUNCTIONS ##
-
-
-def hasConjuncts(tree):
-    pass
-    
-
-
 # # OTHERS ##
 
 
@@ -188,7 +180,7 @@ def simplify_sen(sent):
 
 
 def main():
-    sent = "Dempsey played for Premier League team Fulham and is the club 's highest Premier League goalscorer of all time Between 2007 and 2012."
+    sent = "John went to the store."
     tree = parser.raw_parse(sent).next()
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation
