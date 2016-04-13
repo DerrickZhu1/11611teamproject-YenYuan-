@@ -24,9 +24,9 @@ parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to
 
 def extractSimplifiedSentences(tree):
     if tsurgeon.hasConjuncts(tree):
-        (sub1, sub2) = tsurgeon.extractConjuncts(tree)
-        return (extractSimplifiedSentences(Tree.fromstring(sub1)) +
-                extractSimplifiedSentences(Tree.fromstring(sub2)))
+        (sub1, sub2) = extractConjuncts(tree)
+        return (extractSimplifiedSentences(sub1) +
+                extractSimplifiedSentences(sub2))
     result = []
     extracted = [tree] + getExtractions(tree)  # <- a list of extractions
     for t in extracted:
@@ -44,7 +44,7 @@ def extractHelper(tree):
     for remove in removalFunctions:
         tree = remove(tree)
     if tsurgeon.hasSubConjuncts(tree):
-        conjuncts = extractConjuncts(tree)
+        conjuncts = extractSubConjuncts(tree)
         for t in conjuncts:
             result.append(t)
     elif tsurgeon.hasSubjFMV(tree):
@@ -120,8 +120,15 @@ def extractParticiple(tree):
     pass
 
 
+def extractConjuncts(tree):
+    (sub1, sub2) = tsurgeon.extractConjuncts(tree)
+    return (Tree.fromstring(sub1), Tree.fromstring(sub2))
+    
+
+
 def extractSubConjuncts(tree):
-    pass
+    (sub1, sub2) = tsurgeon.extract_sub_conjuncts(tree)
+    return (Tree.fromstring(sub1), Tree.fromstring(sub2))
 
 
 # # REMOVAL FUNCTIONS ##
@@ -138,6 +145,11 @@ def removeNounMods(tree):
     
 
 def removeVerbMods(tree):
+    tree_str = tsurgeon.remove_verb_modifiers(tree)
+    if tree_str != '':
+        new = Tree.fromstring(tree_str)
+        if new != tree:
+            return removeVerbMods(new)
     return tree
 
 
@@ -146,7 +158,7 @@ def removeLeadingMods(tree):
     if tree_str != '':
         new = Tree.fromstring(tree_str)
         if new != tree:
-            return removeLeadingMods(Tree.fromstring(tree_str))
+            return removeLeadingMods(new)
     return tree
     
 
@@ -183,9 +195,8 @@ def simplify_sen(sent):
 
 
 def main():
-    sent = "John, a man, went to the store and, in a hurry, Mary left."
+    sent = "John knows that snow is white and that leaves are green."
     tree = parser.raw_parse(sent).next()
-    print(str(tree))
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation
     for tree in result:

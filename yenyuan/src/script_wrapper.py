@@ -13,8 +13,7 @@ tregex_path = '../lib/stanford-tregex-2015-12-09/'
 tregex_class_path = tregex_path + 'stanford-tregex.jar:' + tregex_path + 'lib/*'
 
 # use this method to write the string to a temp file before use the script
-def write_to_temp(tree):
-    temp_file = "../temp/__temp"
+def write_to_temp(tree, temp_file="../temp/__temp"):
     with open(temp_file, "w+") as f:
         f.write(str(tree))
         f.close()
@@ -163,6 +162,13 @@ def remove_leading_mods(tree):
     return tsurgeon(f, pattern, 'delete mod')
 
 
+# removes verb modifiers offset by commas
+def remove_verb_modifiers(tree):
+    f = write_to_temp(tree)
+    pattern = '/.?/=mod > VP $ (/VB.?/ $+ /,/)'
+    return tsurgeon(f, pattern, 'delete mod')
+
+
 # checks if a tree has conjoined VP, S or SBAR
 def hasSubConjuncts(tree):
     f = write_to_temp(tree)
@@ -188,6 +194,20 @@ def extractConjuncts(tree):
     conjunct2 = '(ROOT %s (. .))' % conjunct2
     return (conjunct1, conjunct2)
     
+
+# extracts sentences for conjoined VPs and SBARs
+# FAILS WHEN CONJUNCTS OFFSET BY COMMAS
+def extract_sub_conjuncts(tree):
+    f = write_to_temp(tree)
+    pattern1 = '/VP|SBAR/=conjunct $+ /CC/=conj'
+    pattern2 = '/CC/=conj $+ /VP|SBAR/=conjunct'
+    tree_str_1 = tsurgeon(f, pattern1, 'delete conjunct')
+    g = write_to_temp(tree_str_1, "../temp/__temp2")
+    tree_str_1 = tsurgeon(g, pattern2, 'delete conj')
+    tree_str_2 = tsurgeon(f, pattern2, 'delete conjunct')
+    g = write_to_temp(tree_str_2, "../temp/__temp2")
+    tree_str_2 = tsurgeon(g, pattern1, 'delete conj')
+    return (tree_str_1, tree_str_2)
 
 
 ##############  stanford parser wrapper ################

@@ -1,13 +1,10 @@
 (ROOT
   (S
-    (S
-      (NP (NP (NNP John)) (, ,) (NP (DT a) (NN man)) (, ,))
-      (VP (VBD went) (PP (TO to) (NP (DT the) (NN store)))))
-    (CC and)
-    (, ,)
-    (S
-      (PP (IN in) (NP (DT a) (NN hurry)))
-      (, ,)
-      (NP (NNP Mary))
-      (VP (VBD left)))
+    (VP
+      (VB Youth)
+      (NP
+        (NP (NNP Soccer) (POS 's))
+        (NNP Olympic)
+        (NNP Development)
+        (NN Program)))
     (. .)))
