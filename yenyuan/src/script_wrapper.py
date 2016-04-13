@@ -164,11 +164,30 @@ def remove_leading_mods(tree):
 
 
 # checks if a tree has conjoined VP, S or SBAR
-def hasConjuncts(tree):
+def hasSubConjuncts(tree):
     f = write_to_temp(tree)
-    pattern = 'CC=conj $+ /VP|S|SBAR/ !< /or|nor/'
+    pattern = 'CC=conj $+ /VP|SBAR/ !< /or|nor/'
     return tregex(f, pattern)
 
+
+# checks if a tree has sentential conjuncts
+def hasConjuncts(tree):
+    f = write_to_temp(tree)
+    pattern = 'S > S $+ (CC !< /or|nor/ $+ S)'
+    return tregex(f, pattern)
+
+
+# returns pair of conjoined sentences
+def extractConjuncts(tree):
+    f = write_to_temp(tree)
+    pattern1 = 'S > S $+ CC'
+    pattern2 = 'S > S $- CC'
+    conjunct1 = tregex(f, pattern1).strip()
+    conjunct2 = tregex(f, pattern2).strip()
+    conjunct1 = '(ROOT %s (. .))' % conjunct1
+    conjunct2 = '(ROOT %s (. .))' % conjunct2
+    return (conjunct1, conjunct2)
+    
 
 
 ##############  stanford parser wrapper ################

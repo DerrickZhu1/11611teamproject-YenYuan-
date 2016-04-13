@@ -1,5 +1,13 @@
 (ROOT
   (S
-    (NP (NNP John))
-    (VP (VBD went) (PP (TO to) (NP (DT the) (NN store))))
+    (S
+      (NP (NP (NNP John)) (, ,) (NP (DT a) (NN man)) (, ,))
+      (VP (VBD went) (PP (TO to) (NP (DT the) (NN store)))))
+    (CC and)
+    (, ,)
+    (S
+      (PP (IN in) (NP (DT a) (NN hurry)))
+      (, ,)
+      (NP (NNP Mary))
+      (VP (VBD left)))
     (. .)))

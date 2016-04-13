@@ -23,6 +23,10 @@ parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to
 
 
 def extractSimplifiedSentences(tree):
+    if tsurgeon.hasConjuncts(tree):
+        (sub1, sub2) = tsurgeon.extractConjuncts(tree)
+        return (extractSimplifiedSentences(Tree.fromstring(sub1)) +
+                extractSimplifiedSentences(Tree.fromstring(sub2)))
     result = []
     extracted = [tree] + getExtractions(tree)  # <- a list of extractions
     for t in extracted:
@@ -39,8 +43,7 @@ def extractHelper(tree):
     removalFunctions = [removeNounMods, removeVerbMods, removeLeadingMods]
     for remove in removalFunctions:
         tree = remove(tree)
-    if tsurgeon.hasConjuncts(tree):
-        print("conjuncts")
+    if tsurgeon.hasSubConjuncts(tree):
         conjuncts = extractConjuncts(tree)
         for t in conjuncts:
             result.append(t)
@@ -117,7 +120,7 @@ def extractParticiple(tree):
     pass
 
 
-def extractConjuncts(tree):
+def extractSubConjuncts(tree):
     pass
 
 
@@ -180,8 +183,9 @@ def simplify_sen(sent):
 
 
 def main():
-    sent = "John went to the store."
+    sent = "John, a man, went to the store and, in a hurry, Mary left."
     tree = parser.raw_parse(sent).next()
+    print(str(tree))
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation
     for tree in result:
