@@ -192,7 +192,8 @@ def collect_named_entities(sentence):
             entities[prev_tag_name].append(str(cur_entity))
             cur_entity = cur_token
         prev_tag_name = cur_tag_name
-    del entities['O']  # not needed, 'O' means not a named entity
+    if 'O' in entities:
+        del entities['O']  # not needed, 'O' means not a named entity
     return entities
 
 
@@ -207,7 +208,7 @@ def gen_question_recur(tree, ori_sent_inversed, ori_sent, questions, all_entitie
     for i in range(0, len(tree)):
         node = tree[i]
         if isinstance(node, nltk.Tree):
-            if node.label() == "NP":  # for non-subject
+            if node.label() == "NP":  # for non-subject NP
                 substr = ' '.join(node.leaves())
                 qhead = find_qhead(all_entities, substr)
                 if qhead:
@@ -215,16 +216,16 @@ def gen_question_recur(tree, ori_sent_inversed, ori_sent, questions, all_entitie
                     questions.append(' '.join([qhead, ori_sent_inversed.replace(substr, '')]))
             if node.label() == "SBAR":  # for clause
                 substr = ' '.join(node.leaves())
-                qhead = find_qhead(all_entities, substr)
-                if qhead:
-                    # remove the substring and insert question head word in front
-                    questions.append(' '.join([qhead, ori_sent_inversed.replace(substr, '')]))
+                # remove the substring and insert question head word in front
+                questions.append(' '.join(["What", ori_sent_inversed.replace(substr, '')]))
             if node.label() == tsurgeon.label_subject:  # for subject
                 substr = ' '.join(node.leaves())
                 qhead = find_qhead(all_entities, substr)
                 if qhead:
                     # remove the substring and insert question head word in front
                     questions.append(' '.join([qhead, ori_sent.replace(substr, '')]))
+            
+            # possible to ignore the whole node if a proper question has been found
             if node.height() > 2:
                 gen_question_recur(node, ori_sent_inversed, ori_sent, questions, all_entities)
 
@@ -241,6 +242,8 @@ def question(inputstr):
     print(main_tree_str)
     '''
     main_tree_str = clean_sentence(main_tree)
+    
+#     print(main_tree_str)
     # TODO: mark_unmovable_tags
     
     main_tree = inverse_verb(main_tree_str)
@@ -253,7 +256,7 @@ def question(inputstr):
     return questions
 
 def main():
-    print(question("Tom went to New York yesterday."))
+    print(question("Dempsey first made his first appearance with the senior team on November 17 2004 against Jamaica."))
 #     while True:  # Just do a keyboard interrupt to exit the loop.
 #         print("\nEnter a simple declarative sentence:")
 #         inputstr = sys.stdin.readline()

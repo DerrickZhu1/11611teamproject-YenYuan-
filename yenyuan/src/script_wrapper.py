@@ -47,7 +47,7 @@ def remove_negation(tree):
 # relabel subject
 def relabel_subject(tree):
     f = write_to_temp(tree)
-    pattern = 'ROOT < (S < (NP=subj $+ VP))'
+    pattern = 'ROOT < (S < (NP=subj $++ VP))'
     unnegated_treestr = tsurgeon(f, pattern, 'relabel subj ' + label_subject)
     return unnegated_treestr
 

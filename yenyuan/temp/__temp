@@ -1,10 +1,1 @@
-(ROOT
-  (S
-    (VP
-      (VB Youth)
-      (NP
-        (NP (NNP Soccer) (POS 's))
-        (NNP Olympic)
-        (NNP Development)
-        (NN Program)))
-    (. .)))
+(ROOT (S (SUBJECT (NNP Dempsey)) (ADVP (RB first)) (VP (VBD made) (NP (PRP$ his) (JJ first) (NN appearance)) (PP (IN with) (NP (NP (DT the) (JJ senior) (NN team)) (PP (IN on) (NP (NNP November) (CD 17))))) (PP (NP (CD 2004)) (IN against) (NP (NNP Jamaica)))) (. .)))
