@@ -9,3 +9,16 @@ done 2. High-level design of the system => Zhong
 done 4. Clean the article and provide input for "gen_question"
 5. Integrate Zhu Bin's change
 6. Integrate the system.
+
+
+
+
+Future work:
+question ranking => find most fluent questions
+pronoun resolution only in subject
+hard question: pronoun resolution ??
+negation handling
+synonym ???
+*object pronoun
+improve performance
+filter our inappropriate questions
