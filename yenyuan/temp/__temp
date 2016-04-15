@@ -1,1 +1,51 @@
-(ROOT (S (SUBJECT (NNP Dempsey)) (ADVP (RB first)) (VP (VBD made) (NP (PRP$ his) (JJ first) (NN appearance)) (PP (IN with) (NP (NP (DT the) (JJ senior) (NN team)) (PP (IN on) (NP (NNP November) (CD 17))))) (PP (NP (CD 2004)) (IN against) (NP (NNP Jamaica)))) (. .)))
+(ROOT
+  (S
+    (NP (PRP$ His) (ADJP (JJR older)) (NN brother) (NNP Ryan))
+    (VP
+      (VBD was)
+      (VP
+        (VP
+          (VBN offered)
+          (NP
+            (NP (DT a) (NN tryout))
+            (PP
+              (IN for)
+              (NP
+                (NP (DT the) (NNP Dallas) (NNPS Texans))
+                (, ,)
+                (NP
+                  (DT an)
+                  (JJ elite)
+                  (NN youth)
+                  (NN soccer)
+                  (NN club))
+                (, ,)))))
+        (CC and)
+        (VP
+          (VBN brought)
+          (NP
+            (NP (NNP Clint))
+            (, ,)
+            (SBAR
+              (WHNP (WP who))
+              (S
+                (VP
+                  (VBD was)
+                  (VP
+                    (VBN noticed)
+                    (CC and)
+                    (VBN recruited)
+                    (PP
+                      (IN while)
+                      (S
+                        (VP
+                          (VBG passing)
+                          (NP (NN time))
+                          (S
+                            (VP
+                              (VBG juggling)
+                              (NP (DT a) (NN ball))
+                              (PP
+                                (IN on)
+                                (NP (DT the) (NNS sidelines))))))))))))))))
+    (. .)))

@@ -25,7 +25,8 @@ class Article(object):
                 cleaned = sent_tokenize(line)
                 sentences.extend(cleaned)
         return sentences
-    
+
+        
     
 def test():
     with open("../temp/all.sen", "w+") as t:

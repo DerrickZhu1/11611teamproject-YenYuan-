@@ -12,6 +12,8 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tree import Tree
 
 import script_wrapper
+import process_question
+from extract_answer import extract_answer
 from util import timer_log
 
 
@@ -22,6 +24,7 @@ stemmer = EnglishStemmer()
 '''
 Use Porter Stemming algorithm to clean the words.
 '''
+
 def extract_words(words):
     result = []
     for w in words:
@@ -42,6 +45,15 @@ def yes_or_no(statement, question):
             print("Found missing word: " + t)
             return False
     return True
+
+
+def answer(question, filename):
+    with open(filename, 'r') as f:
+        article = Article(f.read())
+        f.close()
+    print(extract_answer(question, article))
+    
+
 
 # question = "Has he also played for New England Revolution Fulham and Tottenham Hotspur?"
 # sentence = "He has also played for New England Revolution Fulham and Tottenham Hotspur"
