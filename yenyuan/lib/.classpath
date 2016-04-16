@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="arkref/src"/>
+	<classpathentry kind="src" path="stanford-ner-2015-12-09"/>
+	<classpathentry kind="src" path="stanford-parser-full-2015-04-20"/>
+	<classpathentry kind="src" path="stanford-tregex-2015-12-09/examples"/>
+	<classpathentry kind="lib" path="arkref/arkref.jar"/>
+	<classpathentry kind="lib" path="arkref/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="arkref/lib/junit-3.8.2.jar"/>
+	<classpathentry kind="lib" path="arkref/lib/lingpipe-3.8.2.jar"/>
+	<classpathentry kind="lib" path="arkref/lib/simple-xml-2.1.6.jar"/>
+	<classpathentry kind="lib" path="arkref/lib/stanford-parser-2008-10-26.jar"/>
+	<classpathentry kind="lib" path="arkref/lib/supersense-tagger.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/lib/AppleJavaExtensions.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/lib/slf4j-simple.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/stanford-tregex-3.6.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/stanford-tregex-3.6.0-sources.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/stanford-tregex-3.6.0.jar"/>
+	<classpathentry kind="lib" path="stanford-tregex-2015-12-09/stanford-tregex.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

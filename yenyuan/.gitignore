@@ -1,3 +1,7 @@
-lib/
+lib/bin
+lib/stanford-ner-2015-12-09
+lib/stanford-parser-full-2015-04-20
+lib/stanford-tregex-2015-12-09
+lib/WordNet-3.0
 temp/
 data/
