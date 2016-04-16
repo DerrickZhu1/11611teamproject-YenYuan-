@@ -23,14 +23,19 @@ stemmer = EnglishStemmer()
 
 def extract_answer(question, article):
     #type, keywords = process_quesion(question)
-    keywords = word_tokenize(question)[1:-1]
+    keywords = [term.lower() for term in word_tokenize(question)[:-1]]
+    keywords_norm = normalize(word_tokenize(question)[:-1])
     sentences = article.sentences()
-    tokenized = [word_tokenize(sent) for sent in sentences]
+    tokenized = [[term.lower() for term in word_tokenize(sent)] for sent in sentences]
+    tokenized_norm = [normalize(word_tokenize(sent)) for sent in sentences]
     ranked = []
     for i in range(len(sentences)):
-        sent = tokenized[i]
-        similarity = cosine_similarity(keywords, sent, tokenized)
-        ranked.append((1 - similarity, sentences[i]))
+        sent1 = tokenized[i]
+        sent2 = tokenized_norm[i]
+        similarity1 = cosine_similarity(keywords, sent1, tokenized)
+        similarity2 = cosine_similarity(keywords_norm, sent2, tokenized_norm)
+        similarity = (similarity1 + similarity2)/2
+        ranked.append((1 - similarity2, sentences[i]))
     return sorted(ranked)
     # Extract and rank possible answers from the top sentences
     # Return the most likely answer

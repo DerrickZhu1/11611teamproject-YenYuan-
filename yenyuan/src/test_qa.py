@@ -13,17 +13,20 @@ from simplify import simplify_sen
 from extract_answer import extract_answer
 
 
-with open("../data/set3/a9.txt") as f:
+with open("../data/set2/a9.txt") as f:
     article = Article(f.read())
-    question = "Does universal bytecode make porting easier?"
+    question = "When is the most favorable time to observe Taurus in the night sky?"
     ranked_answers = extract_answer(question, article)
     extractions = []
     print("\nQuestion: " + question + "\n")
-    print("Top 5 answer sources:\n")
-    for i in range(5):
-        (sim, sent) = ranked_answers[i]
-        print(str(i+1) + ": " + sent)
-        print("Cosine similarity: " + str(1-sim) + "\n")
+    print("Top answer:")
+    (sim, sent) = ranked_answers[0]
+    print(sent)
+    print("Cosine similarity: " + str(1 - sim))
+    print("\nNext 5 closest:")
+    for (sim, sent) in ranked_answers[1:6]:
+        print(sent)
+        print("Cosine similarity: " + str(1 - sim))
         
 
 
