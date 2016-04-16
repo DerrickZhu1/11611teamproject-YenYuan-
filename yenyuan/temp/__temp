@@ -1,51 +1,35 @@
 (ROOT
   (S
-    (NP (PRP$ His) (ADJP (JJR older)) (NN brother) (NNP Ryan))
+    (NP (NNP Java))
     (VP
-      (VBD was)
+      (VBZ does)
+      (RB not)
       (VP
-        (VP
-          (VBN offered)
+        (VB support)
+        (NP
           (NP
-            (NP (DT a) (NN tryout))
-            (PP
-              (IN for)
+            (NNP C/C)
+            (NNP +)
+            (NNP +)
+            (NN style)
+            (NN pointer)
+            (NN arithmetic))
+          (, ,)
+          (SBAR
+            (WHADVP (WRB where))
+            (S
               (NP
-                (NP (DT the) (NNP Dallas) (NNPS Texans))
-                (, ,)
+                (NP (NN object) (NNS addresses))
+                (CC and)
                 (NP
-                  (DT an)
-                  (JJ elite)
-                  (NN youth)
-                  (NN soccer)
-                  (NN club))
-                (, ,)))))
-        (CC and)
-        (VP
-          (VBN brought)
-          (NP
-            (NP (NNP Clint))
-            (, ,)
-            (SBAR
-              (WHNP (WP who))
-              (S
+                  (NP (JJ unsigned) (NNS integers))
+                  (PRN
+                    (-LRB- -LRB-)
+                    (NP (RB usually) (JJ long) (NN integers))
+                    (-RRB- -RRB-))))
+              (VP
+                (MD can)
                 (VP
-                  (VBD was)
-                  (VP
-                    (VBN noticed)
-                    (CC and)
-                    (VBN recruited)
-                    (PP
-                      (IN while)
-                      (S
-                        (VP
-                          (VBG passing)
-                          (NP (NN time))
-                          (S
-                            (VP
-                              (VBG juggling)
-                              (NP (DT a) (NN ball))
-                              (PP
-                                (IN on)
-                                (NP (DT the) (NNS sidelines))))))))))))))))
+                  (VB be)
+                  (VP (VBN used) (ADVP (RB interchangeably))))))))))
     (. .)))

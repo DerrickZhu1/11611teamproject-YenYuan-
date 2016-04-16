@@ -20,11 +20,11 @@ from nltk.corpus.reader.wordnet import Synset
 #             pass
 #     print("==============")
 
-for synset in wn.synsets("Jamaica"):
+for synset in wn.synsets("earn"):
     for hypernym in synset.instance_hypernyms():
-        print(synset.definition(), hypernym.instance_hyponyms())
+#     print(synset.definition(), hypernym.instance_hyponyms())
 #     print(synset.similar_tos())
-#     print(synset.hypernyms())
+        print(synset.hypernyms())
 #     print(synset.instance_hypernyms())
 #     print(synset.hyponyms())
 #     print(synset.instance_hyponyms())

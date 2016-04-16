@@ -22,23 +22,36 @@ stemmer = EnglishStemmer()
 
 
 def extract_answer(question, article):
-    #type, keywords = process_quesion(question)
-    keywords = [term.lower() for term in word_tokenize(question)[:-1]]
-    keywords_norm = normalize(word_tokenize(question)[:-1])
+    type, keywords = process_question(question)
+    keywords_norm = normalize(keywords)
+    print(keywords_norm)
     sentences = article.sentences()
-    tokenized = [[term.lower() for term in word_tokenize(sent)] for sent in sentences]
+    #tokenized = [[term.lower() for term in word_tokenize(sent)] for sent in sentences]
     tokenized_norm = [normalize(word_tokenize(sent)) for sent in sentences]
     ranked = []
     for i in range(len(sentences)):
-        sent1 = tokenized[i]
+        #sent1 = tokenized[i]
         sent2 = tokenized_norm[i]
-        similarity1 = cosine_similarity(keywords, sent1, tokenized)
+        #similarity1 = cosine_similarity(keywords, sent1, tokenized)
         similarity2 = cosine_similarity(keywords_norm, sent2, tokenized_norm)
-        similarity = (similarity1 + similarity2)/2
+        #similarity = (similarity1 + similarity2)/2
         ranked.append((1 - similarity2, sentences[i]))
-    return sorted(ranked)
-    # Extract and rank possible answers from the top sentences
-    # Return the most likely answer
+    ranked = sorted(ranked)
+    top = ranked[0]
+    top_sent = top[1]
+    print(top_sent)
+    top_dist = top[0]
+    options = simplify_sen(top_sent)
+    options_norm = [normalize(word_tokenize(sent)) for sent in options]
+    for op in options:
+        print(op)
+    for i in range(len(options)):
+        sent = options_norm[i]
+        dist = cosine_similarity(keywords_norm, sent, tokenized_norm)
+        if (dist <= top_dist) and (len(sent) < len(top_sent)):
+            top_sent = options[i]
+            top_dist = dist            
+    return top_sent
     
     
 def cosine_similarity(keywords, document, documents):

@@ -245,7 +245,7 @@ def question(inputstr):
     
 #     print(main_tree_str)
     # TODO: mark_unmovable_tags
-    
+
     main_tree = inverse_verb(main_tree_str)
     sentence = str(' '.join(Tree.fromstring(main_tree_str).leaves()))
     sentence_inversed = str(' '.join(main_tree.leaves()))

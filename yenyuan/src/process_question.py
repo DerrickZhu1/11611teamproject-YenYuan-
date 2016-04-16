@@ -4,6 +4,8 @@ Created on April 14, 2016.
 @author: bsennish
 ''' 
 
+import time
+
 from nltk.parse.stanford import StanfordParser
 #from nltk.stem.snowball import EnglishStemmer
 from nltk.tag.stanford import StanfordNERTagger
@@ -12,6 +14,7 @@ from nltk.tree import Tree
 
 import script_wrapper as stanford_parser
 parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to_models_jar=stanford_parser.stanford_model_jar)
+
 
 
 
@@ -43,7 +46,15 @@ def collect_named_entities(sentence):
     
 def process_question(question):
     type = question_type(question)
-    keywords = word_tokenize(question)[:-1]
+    parse = parser.raw_parse(question).next()
+    tags = parse.pos()
+    keywords = []
+    ignore = ['DT', '.', 'WP', 'PRP', 'PRP$', 'WDT', 'WRB']
+    for (word, tag) in tags:
+        if tag not in ignore and word.lower() not in ["did", "do", "does"]:
+            print(word, tag)
+            keywords.append(word.lower())
+    #keywords = word_tokenize(question)[:-1]
     '''
     if type == "YN":
         # process yes/no question
@@ -67,5 +78,4 @@ def process_yn(question):
 def process_wh(question):
     # extract keywords
     pass
-    
 
