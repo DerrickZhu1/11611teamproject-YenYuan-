@@ -24,7 +24,7 @@ stemmer = EnglishStemmer()
 def extract_answer(question, article):
     type, keywords = process_question(question)
     keywords_norm = normalize(keywords)
-    print(keywords_norm)
+    #print(keywords_norm)
     sentences = article.sentences()
     #tokenized = [[term.lower() for term in word_tokenize(sent)] for sent in sentences]
     tokenized_norm = [normalize(word_tokenize(sent)) for sent in sentences]
@@ -37,6 +37,8 @@ def extract_answer(question, article):
         #similarity = (similarity1 + similarity2)/2
         ranked.append((1 - similarity2, sentences[i]))
     ranked = sorted(ranked)
+    return ranked
+    '''
     top = ranked[0]
     top_sent = top[1]
     print(top_sent)
@@ -52,6 +54,7 @@ def extract_answer(question, article):
             top_sent = options[i]
             top_dist = dist            
     return top_sent
+    '''
     
     
 def cosine_similarity(keywords, document, documents):

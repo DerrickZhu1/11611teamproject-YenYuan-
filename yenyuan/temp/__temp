@@ -1,35 +1,7 @@
 (ROOT
   (S
-    (NP (NNP Java))
-    (VP
-      (VBZ does)
-      (RB not)
-      (VP
-        (VB support)
-        (NP
-          (NP
-            (NNP C/C)
-            (NNP +)
-            (NNP +)
-            (NN style)
-            (NN pointer)
-            (NN arithmetic))
-          (, ,)
-          (SBAR
-            (WHADVP (WRB where))
-            (S
-              (NP
-                (NP (NN object) (NNS addresses))
-                (CC and)
-                (NP
-                  (NP (JJ unsigned) (NNS integers))
-                  (PRN
-                    (-LRB- -LRB-)
-                    (NP (RB usually) (JJ long) (NN integers))
-                    (-RRB- -RRB-))))
-              (VP
-                (MD can)
-                (VP
-                  (VB be)
-                  (VP (VBN used) (ADVP (RB interchangeably))))))))))
+    (NP
+      (NP (DT The) (NN use))
+      (PP (IN of) (NP (JJ universal) (NN bytecode))))
+    (VP (VBZ makes) (S (VP (VBG porting) (ADJP (JJ simple)))))
     (. .)))

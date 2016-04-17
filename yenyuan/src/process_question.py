@@ -16,6 +16,11 @@ import script_wrapper as stanford_parser
 parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to_models_jar=stanford_parser.stanford_model_jar)
 
 
+'''
+from nltk.corpus import wordnet as wn
+from nltk.corpus.reader.wordnet import Synset
+'''
+
 
 
 def collect_named_entities(sentence):
@@ -52,8 +57,9 @@ def process_question(question):
     ignore = ['DT', '.', 'WP', 'PRP', 'PRP$', 'WDT', 'WRB']
     for (word, tag) in tags:
         if tag not in ignore and word.lower() not in ["did", "do", "does"]:
-            print(word, tag)
+            #print(word, tag)
             keywords.append(word.lower())
+            
     #keywords = word_tokenize(question)[:-1]
     '''
     if type == "YN":

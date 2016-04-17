@@ -15,7 +15,8 @@ from extract_answer import extract_answer
 
 with open("../data/set3/a9.txt") as f:
     article = Article(f.read())
-    question = "Does Java support C/C++ style pointer arithmetic?"
+    question = "Does universal bytecode make porting easier?"
+    '''
     print("\nQuestion: " + question + "\n")
     answer = extract_answer(question, article)
     print("Top answer:\n"+answer)
@@ -30,7 +31,6 @@ with open("../data/set3/a9.txt") as f:
     for (sim, sent) in ranked_answers[1:6]:
         print(sent)
         print("Cosine similarity: " + str(1 - sim))
-    '''
         
 
 
