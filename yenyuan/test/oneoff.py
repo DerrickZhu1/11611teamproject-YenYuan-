@@ -19,8 +19,7 @@ from nltk.corpus.reader.wordnet import Synset
 #             print(m[0])
 #             pass
 #     print("==============")
-
-for synset in wn.synsets("Jamaica"):
+for synset in wn.synsets("Washington"):
     for hypernym in synset.instance_hypernyms():
         print(synset.definition(), hypernym.instance_hyponyms())
 #     print(synset.similar_tos())

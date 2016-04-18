@@ -15,7 +15,7 @@ parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to
 
 
 
-def collect_named_entities(sentence):
+def named_entities(sentence):
     st = StanfordNERTagger(model_filename='../lib/stanford-ner-2015-12-09/classifiers/english.all.3class.distsim.crf.ser.gz', path_to_jar="../lib/stanford-ner-2015-12-09/stanford-ner-3.6.0.jar")
     tags = st.tag(word_tokenize(sentence))
     print(tags)

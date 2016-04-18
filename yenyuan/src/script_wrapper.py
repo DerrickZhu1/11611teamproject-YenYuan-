@@ -13,6 +13,7 @@ tregex_path = '../lib/stanford-tregex-2015-12-09/'
 tregex_class_path = tregex_path + 'stanford-tregex.jar:' + tregex_path + 'lib/*'
 
 label_subject = "SUBJECT"
+label_NP_in_PP = "pNP"
 
 # use this method to write the string to a temp file before use the script
 def write_to_temp(tree, temp_file="../temp/__temp"):
@@ -48,8 +49,15 @@ def remove_negation(tree):
 def relabel_subject(tree):
     f = write_to_temp(tree)
     pattern = 'ROOT < (S < (NP=subj $++ VP))'
-    unnegated_treestr = tsurgeon(f, pattern, 'relabel subj ' + label_subject)
-    return unnegated_treestr
+    relabeled_treestr = tsurgeon(f, pattern, 'relabel subj ' + label_subject)
+    return relabeled_treestr
+
+# relabel NP in PP
+def relabel_NP_in_PP(tree):
+    f = write_to_temp(tree)
+    pattern = 'PP < NP=pNP'
+    relabeled_treestr = tsurgeon(f, pattern, 'relabel pNP ' + label_NP_in_PP)
+    return relabeled_treestr
 
 # Checks whether there are auxiliaries in the sentence.
 def test_aux(tree):
