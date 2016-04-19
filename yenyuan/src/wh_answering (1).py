@@ -133,25 +133,23 @@ def get_prep(tree, answer_sentence, entity,prep):
 
 
 def delete_entity_in_question(entities,k):
-    if k < len(entities) - 1:
-        for (tag_a,entity_a) in entities[k+1].iteritems():
-            for (tag_q,entity_q) in entities[0].iteritems():
-                inters=set(entity_a).intersection(entity_q)
-                if inters:
-                    for inter in inters:
-                        entities[k + 1][tag_a].remove(inter)
-        entity=entities[k + 1].copy()
-        for (tag_a, entity_a) in entities[k + 1].iteritems():
-            if entity[tag_a] == []:
-                entity.pop(tag_a)
-        return entity
-    return entities
+    for (tag_a,entity_a) in entities[k+1].iteritems():
+        for (tag_q,entity_q) in entities[0].iteritems():
+            inters=set(entity_a).intersection(entity_q)
+            if inters:
+                for inter in inters:
+                    entities[k + 1][tag_a].remove(inter)
+    entity=entities[k + 1].copy()
+    for (tag_a, entity_a) in entities[k + 1].iteritems():
+        if entity[tag_a] == []:
+            entity.pop(tag_a)
+    return entity
 
 
 def get_answer_phrase(question,top_sentences,entities):
     k=0
     wh=question.split()[0]
-    while(k<4):
+    while(k<6):
         # print k
         match_tags=[]
         entities[k+1]=delete_entity_in_question(entities,k) # delete entities of answer sentence from question
@@ -163,7 +161,6 @@ def get_answer_phrase(question,top_sentences,entities):
                 # print 111
                 (sim, answer_sentence) = top_sentences[k]
                 return answer_sentence #if multiple tags use original sentence
-            # print(entities[k+1][match_tags[0]])
             if len(entities[k+1][match_tags[0]])>1:
                 # print 222
                 (sim, answer_sentence) = top_sentences[k]
@@ -191,6 +188,8 @@ def get_answer_phrase(question,top_sentences,entities):
                     return a[0].title()+' ' + ' '.join(a[1:]) + '.'
                 else:
                     return a[0].title() + '.'
+            elif wh=="What":
+                return top_sentences[0][1]
             else:
                 # print 444
                 a = entities[k + 1][match_tags[0]][0].split()
@@ -200,7 +199,8 @@ def get_answer_phrase(question,top_sentences,entities):
                     return a[0].title()+ '.'
         else:
             k=k+1
-        if k==4:
+        if k==6:
+            # print 555
             return top_sentences[0][1]
 
 '''

@@ -13,9 +13,9 @@ from simplify import simplify_sen
 
 
 
-with open("../data/set4/a1.txt") as f:
+with open("../data/set3/a9.txt") as f:
     article = Article(f.read())
-    question = "Who directed The Artist?"
+    question = "Who created Java?"
     print(extract_answer(question, article))
         
 

@@ -76,18 +76,31 @@ def extractNonResMod(tree):
     subject = tsurgeon.findSubject(tree)
     if not subject:
         return
-    sub_tree = Tree.fromstring(subject)
-    tokens = sub_tree.leaves()
+    subj_tree = Tree.fromstring(subject)
+    tokens = subj_tree.leaves()
     parts = ' '.join(tokens).split(',')
     main_subject = parts[0]
     if len(parts) > 1 and parts[1] != '':
-        phrase_type = getTag(parts[1].strip(), sub_tree)
+        phrase_type = getTag(parts[1].strip(), subj_tree)
         # check if it is an appositive
         if phrase_type == 'NP':
             # adding 'is' temporarily - might be able to get inflection correct
             # by examining get_top_questions verb.
-            sentence = main_subject + 'is' + parts[1].rstrip() + '.'
-            return sentence
+            appos = parts[1].split()
+            subj = main_subject.split()
+            appos_tree = None
+            newsubj_tree = None
+            for sub in subj_tree.subtrees():
+                if sub.leaves() == appos and (appos_tree == None or 
+                                              len(sub) > len(appos_tree)):
+                    appos_tree = str(sub)
+                elif sub.leaves() == subj and (newsubj_tree == None or 
+                                              len(sub) > len(newsubj_tree)):
+                    newsubj_tree = str(sub)
+            new_treestr = "(ROOT (S %s (VP (VBZ is) %s) (. .)))" % (newsubj_tree,
+                                                                    appos_tree)
+            new_tree = Tree.fromstring(new_treestr)
+            return new_tree
         # check if it is a relative clause
         elif phrase_type == 'SBAR':
             # CONSTRAINTS:
@@ -200,7 +213,7 @@ def simplify_sen(sent):
 
 
 def main():
-    sent = "Before leaving, Donovan was loaned to the San Jose Earthquakes."
+    sent = "John, a man, ran."
     tree = parser.raw_parse(sent).next()
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation

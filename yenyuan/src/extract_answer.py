@@ -37,22 +37,21 @@ def extract_answer(question, article):
         similarity2 = cosine_similarity(keywords_norm, sent2, tokenized_norm)
         similarity = (0.25 * similarity1) + (0.75 * similarity2)
         ranked.append((1 - similarity, sentences[i]))
-    ranked = sorted(ranked)[:6]
-    for pair in ranked:
-        print(pair)
-    ranked_sents = [word for (score, word) in ranked]
+    ranked = sorted(ranked)[:4]
     if type == "WH":
         entities = collect_name_entities(question, ranked)
-        return get_answer_phrase(question, ranked, entities)
+        try:
+            return get_answer_phrase(question, ranked, entities)
+        except:
+            return ranked[0][1]
     return yes_no(keywords_norm, ranked)
     
 
-# TEMPORARY
 def yes_no(keywords, ranked):
     top_sent = ranked[0][1]
-    if ranked[0][0] > 0.002:
-        return top_sent
-    return "Yes"
+    normed_sent = normalize([term.lower() for term in word_tokenize(top_sent)])
+    
+    return top_sent
     
     
 def cosine_similarity(keywords, document, documents):

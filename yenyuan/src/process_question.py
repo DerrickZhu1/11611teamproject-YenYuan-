@@ -67,7 +67,7 @@ def process_question(question):
 
 def question_type(question):
     first = question.split(" ")[0].lower()
-    wh_words = ["who", "what", "where", "when", "why", "how"]
+    wh_words = ["who", "where", "when"]
     if first in wh_words:
         return "WH"
     return "YN"
