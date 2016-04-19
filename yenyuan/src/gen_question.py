@@ -331,7 +331,7 @@ def question(inputstr):
     
 #     Tree.fromstring(main_tree_str).pprint()
     # TODO: mark_unmovable_tags
-    
+
     main_tree = inverse_verb(main_tree_str)
     sentence = str(' '.join(Tree.fromstring(main_tree_str).leaves()))
     sentence_inversed = str(' '.join(main_tree.leaves()))
