@@ -14,6 +14,7 @@ from process_question import process_question
 from nltk.stem.snowball import EnglishStemmer
 from nltk.tokenize import word_tokenize
 
+from wh_answering import get_answer_phrase, collect_name_entities
 from simplify import simplify_sen
 
 
@@ -22,9 +23,9 @@ stemmer = EnglishStemmer()
 
 
 def extract_answer(question, article):
-    #type, keywords = process_quesion(question)
-    keywords = [term.lower() for term in word_tokenize(question)[:-1]]
-    keywords_norm = normalize(word_tokenize(question)[:-1])
+    type, keywords = process_question(question)
+    keywords_norm = normalize(keywords)
+    #print(keywords_norm)
     sentences = article.sentences()
     tokenized = [[term.lower() for term in word_tokenize(sent)] for sent in sentences]
     tokenized_norm = [normalize(word_tokenize(sent)) for sent in sentences]
@@ -34,11 +35,24 @@ def extract_answer(question, article):
         sent2 = tokenized_norm[i]
         similarity1 = cosine_similarity(keywords, sent1, tokenized)
         similarity2 = cosine_similarity(keywords_norm, sent2, tokenized_norm)
-        similarity = (similarity1 + similarity2)/2
-        ranked.append((1 - similarity2, sentences[i]))
-    return sorted(ranked)
-    # Extract and rank possible answers from the top sentences
-    # Return the most likely answer
+        similarity = (0.25 * similarity1) + (0.75 * similarity2)
+        ranked.append((1 - similarity, sentences[i]))
+    ranked = sorted(ranked)[:6]
+    for pair in ranked:
+        print(pair)
+    ranked_sents = [word for (score, word) in ranked]
+    if type == "WH":
+        entities = collect_name_entities(question, ranked)
+        return get_answer_phrase(question, ranked, entities)
+    return yes_no(keywords_norm, ranked)
+    
+
+# TEMPORARY
+def yes_no(keywords, ranked):
+    top_sent = ranked[0][1]
+    if ranked[0][0] > 0.002:
+        return top_sent
+    return "Yes"
     
     
 def cosine_similarity(keywords, document, documents):
@@ -88,5 +102,4 @@ def normalize(document):
         if not match(r"[^a-zA-Z\d\s:]", cleaned):
             result.append(cleaned)
     return result
-
     

@@ -39,16 +39,19 @@ def extractSimplifiedSentences(tree):
 
 def extractHelper(tree):
     result = []
-    tree = movePP(tree)
+    new = movePP(tree)
+    trees = [tree, new]
     removalFunctions = [removeNounMods, removeVerbMods, removeLeadingMods]
     for remove in removalFunctions:
         tree = remove(tree)
-    if tsurgeon.hasSubConjuncts(tree):
-        conjuncts = extractSubConjuncts(tree)
-        for t in conjuncts:
-            result.append(t)
-    elif tsurgeon.hasSubjFMV(tree):
-        result.append(tree)
+        new = remove(new)
+    for tr in trees:
+        if tsurgeon.hasSubConjuncts(tr):
+            conjuncts = extractSubConjuncts(tr)
+            for t in conjuncts:
+                result.append(t)
+        elif tsurgeon.hasSubjFMV(tr):
+            result.append(tr)
     return result
         
     
@@ -196,8 +199,8 @@ def simplify_sen(sent):
     return results
 
 
-def get_top_questions():
-    sent = "John knows that snow is white and that leaves are green."
+def main():
+    sent = "Before leaving, Donovan was loaned to the San Jose Earthquakes."
     tree = parser.raw_parse(sent).next()
     result = extractSimplifiedSentences(tree)
     punct = string.punctuation
@@ -208,4 +211,4 @@ def get_top_questions():
 
 
 if __name__ == "__main__":
-    get_top_questions()
+    main()

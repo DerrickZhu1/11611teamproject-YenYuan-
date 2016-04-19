@@ -6,27 +6,17 @@ Created on Apr 9, 2016
 
 import traceback
 
-from answer import yes_or_no
+from extract_answer import extract_answer
 from article import Article
 from gen_question import question
 from simplify import simplify_sen
-from extract_answer import extract_answer
 
 
-with open("../data/set2/a9.txt") as f:
+
+with open("../data/set4/a1.txt") as f:
     article = Article(f.read())
-    question = "When is the most favorable time to observe Taurus in the night sky?"
-    ranked_answers = extract_answer(question, article)
-    extractions = []
-    print("\nQuestion: " + question + "\n")
-    print("Top answer:")
-    (sim, sent) = ranked_answers[0]
-    print(sent)
-    print("Cosine similarity: " + str(1 - sim))
-    print("\nNext 5 closest:")
-    for (sim, sent) in ranked_answers[1:6]:
-        print(sent)
-        print("Cosine similarity: " + str(1 - sim))
+    question = "Who directed The Artist?"
+    print(extract_answer(question, article))
         
 
 

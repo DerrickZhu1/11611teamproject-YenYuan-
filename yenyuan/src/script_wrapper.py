@@ -174,7 +174,7 @@ def remove_participle_mods(tree):
 # removes leading modifiers to the subject NP
 def remove_leading_mods(tree):
     f = write_to_temp(tree)
-    pattern = '/.?/=mod $+ NP > (S > ROOT)'
+    pattern = '/PP/=mod $+ (/,/ $+ NP > (S > ROOT))'
     return tsurgeon(f, pattern, 'delete mod')
 
 

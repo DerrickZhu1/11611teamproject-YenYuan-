@@ -25,7 +25,10 @@ Maybe optimize - this is quite slow.
 import csv
 import re
 import string
+
 from subprocess import check_output
+
+import sys
 
 import nltk
 from nltk.parse.stanford import StanfordParser
@@ -341,3 +344,17 @@ def question(inputstr):
     questions = [cleanup_question(q) for q in questions]
     questions.append(fix_output(main_tree))
     return questions
+
+def main():
+    print(question("Dempsey first made his first appearance with the senior team on November 17 2004 against Jamaica."))
+    while True:  # Just do a keyboard interrupt to exit the loop.
+        print("\nEnter a simple declarative sentence:")
+        inputstr = sys.stdin.readline()
+        q = question(inputstr)
+        print("\nQUESTION:")
+        print(q)
+
+
+if __name__ == "__main__":
+    main()
+

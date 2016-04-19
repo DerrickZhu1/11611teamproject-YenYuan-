@@ -4,11 +4,11 @@ Created on Apr 17, 2016
 '''
 
 import traceback
-from answer import yes_or_no
+#from answer import yes_or_no
 from article import Article
 from gen_question import question
 from simplify import simplify_sen
-from extract_answer import extract_answer
+#from extract_answer import extract_answer
 import re
 import string
 import nltk
@@ -19,11 +19,18 @@ from nltk.tokenize import word_tokenize
 from nltk.tree import Tree
 import script_wrapper as stanford_parser
 import script_wrapper as tsurgeon
+from config import debug
+from subprocess import check_output
+import script_wrapper
+import script_wrapper as stanford_parser
+import script_wrapper as tsurgeon
+import csv
+
 
 wh_map= {"Where":["GPE"], "Who":["PERSON"], "When":["DATE","TIME"], "What":["PRODUCT","ORGANIZATION"]}
 parser = StanfordParser(path_to_jar=stanford_parser.stanford_parser_jar, path_to_models_jar=stanford_parser.stanford_model_jar)
 
-
+'''
 def get_ranked_sentences(): #also question and sentences storage
     with open("../data/set2/a9.txt") as f:
         article = Article(f.read())
@@ -48,24 +55,31 @@ def get_ranked_sentences(): #also question and sentences storage
     with open("../temp/news2.txt", "w+") as f:
         f.write(str(whole))
     return question,ranked_answers[0:6]
+'''
 
+def collect_name_entities(question,top_sentences):
+    #combine question and sentences into one file
+    sentence=question
+    for k in range(len(top_sentences)):
+        (sim, answer_sentence) = top_sentences[k]
+        sentence=sentence+"\n"+answer_sentence
 
-def collect_name_entities():
-    import csv
-    with open("../temp/news1.txt", "w+") as f:
+    with open("../temp/news2.txt", "w+") as f:
         f.write(str(sentence))
         f.close()
-    if debug:
-        result = check_output(['./run_sst.sh', '../../temp/news1.txt'], cwd="../lib/sst-light/")
+
+    if True:
+        result = check_output(['./run_sst.sh', '../../temp/news2.txt'], cwd="../lib/sst-light/", stderr=script_wrapper.DEVNULL)
     else:
-        result = check_output(['./run_sst.sh', '../../temp/news1.txt'], cwd="../lib/sst-light/", stderr=script_wrapper.DEVNULL)
-    with open("../temp/news1.tags", "w+") as f:
+        result = check_output(['./run_sst.sh', '../../temp/news2.txt'], cwd="../lib/sst-light/", stderr=script_wrapper.DEVNULL)
+    with open("../temp/news2.tags", "w+") as f:
         f.write(result)
+
     entities_l=[]
     tags_l=[]
     ii=0
     # with open("../temp/news1.tags") as tsv:
-    with open("../sst-light-0.4/DATA/news3.tags") as tsv:
+    with open("../temp/news2.tags") as tsv:
         for line in csv.reader(tsv,delimiter="\t"):
             entities_l.append([])
             tags_l.append([])
@@ -77,32 +91,29 @@ def collect_name_entities():
                     if line[3]!='0':
                         entities_l[ii].append(line[0])
                         tags_l[ii].append(line[3])
-
+    print entities_l[1]
+    print tags_l[1]
     # clean up the result from the tagger
     entities = []
     for k in range(ii):
-        prev_tag_name = str(tags_l[k][0].split(':')[1])
-        # if len(tags_l[k][0].split(':'))==3:
-        #     prev_tag_name = prev_tag_name +':'+tags_l[k][0].split(':')[2]
-        cur_entity = str(entities_l[k][0])
+        prev_tag_name = tags_l[k][0].split(':')[:2]
+        cur_entity = entities_l[k][0]
         entities.append({})
         for i in range(1, len(tags_l[k])):
-            cur_token = str(entities_l[k][i])
-            cur_tag_name = str(tags_l[k][i].split(':')[1])
-            # if len(tags_l[k][i].split(':'))==3:
-            #     cur_tag_name = cur_tag_name + ':' + tags_l[k][i].split(':')[2]
-            if cur_tag_name == prev_tag_name:
+            cur_token = entities_l[k][i]
+            cur_tag_name = tags_l[k][i].split(':')[:2]
+            if 'I' in cur_tag_name[0] :
                 cur_entity = cur_entity + " " + cur_token
             else:
-                if not prev_tag_name in entities[k]:
-                    entities[k][prev_tag_name] = []
+                if not prev_tag_name[1] in entities[k]:
+                    entities[k][prev_tag_name[1]] = []
                 # change encoding, another way is to .encode('ascii','ignore')
-                entities[k][prev_tag_name].append(str(cur_entity))
+                entities[k][prev_tag_name[1]].append(str(cur_entity))
                 cur_entity = cur_token
             if i==len(tags_l[k])-1:
-                if not cur_tag_name in entities[k]:
-                    entities[k][cur_tag_name] = []
-                entities[k][cur_tag_name].append(str(cur_entity))
+                if not cur_tag_name[1] in entities[k]:
+                    entities[k][cur_tag_name[1]] = []
+                entities[k][cur_tag_name[1]].append(str(cur_entity))
             prev_tag_name = cur_tag_name
     return entities
 
@@ -147,17 +158,18 @@ def get_answer_phrase(question,top_sentences,entities):
                 # print 111
                 (sim, answer_sentence) = top_sentences[k]
                 return answer_sentence #if multiple tags use original sentence
+            print(entities[k+1][match_tags[0]])
             if len(entities[k+1][match_tags[0]])>1:
                 # print 222
                 (sim, answer_sentence) = top_sentences[k]
-                print entities[k+1][match_tags[0]]
+                #print entities[k+1][match_tags[0]]
                 return answer_sentence #if multiple entities use original sentence
             #get answer phrase
             if wh=="When" or wh=="Where":
                 # print 333
                 (sim,answer_sentence)=top_sentences[k]
                 main_tree = parser.raw_parse(answer_sentence).next()
-                print main_tree
+                # print main_tree
                 prep=[]
                 get_prep(main_tree,answer_sentence,entities[k+1][match_tags[0]][0],prep)
                 if prep!=[]:
@@ -168,6 +180,14 @@ def get_answer_phrase(question,top_sentences,entities):
                         return a[0].title()+' ' + ' '.join(a[1:]) + '.'
                     else:
                         return a[0].title() + '.'
+            elif wh=="Who":
+                a = entities[k + 1][match_tags[0]][0].split()
+                if len(a) > 1:
+                    return a[0].title()+' ' + ' '.join(a[1:]) + '.'
+                else:
+                    return a[0].title() + '.'
+            elif wh=="What":
+                return top_sentences[0][1]
             else:
                 # print 444
                 a = entities[k + 1][match_tags[0]][0].split()
@@ -178,16 +198,16 @@ def get_answer_phrase(question,top_sentences,entities):
         else:
             k=k+1
         if k==6:
-            return "No answer !"
+            return top_sentences[0][1]
 
-
+'''
 def main():
     question,top_sentences=get_ranked_sentences()
-    entities=collect_name_entities()
-    # entities[1]['DATE']=['the months of December and January']
+    entities=collect_name_entities(question,top_sentences)
+    # # entities[1]['DATE']=['the months of December and January']
     answer_phrase=get_answer_phrase(question,top_sentences,entities)
     print answer_phrase
-
+'''
 
 if __name__ == "__main__":
     main()
