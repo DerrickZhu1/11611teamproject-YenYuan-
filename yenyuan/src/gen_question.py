@@ -6,7 +6,7 @@ authors - zhongzhu, bsennish
 Changes made:
 Fixed issues with aux verb handling.
 - Treat have|has|had as aux only when sistered to a VP
-Improved main verb recognition.
+Improved get_top_questions verb recognition.
 - Can handle sentences with embedded clauses.
 - Can handle conjoined VP's
 Handled sentences with basic negation.
@@ -17,7 +17,7 @@ TO DO (in the very near future):
 Preprocessing on complex sentences.
 Fix outstanding issues with simple constructions.
 - Deal with contractions (I'm, you're, etc.)
-Better main verb recognition - maybe with dependency parsing.
+Better get_top_questions verb recognition - maybe with dependency parsing.
 Figure out how to stop tsurgeon from printing loads of stuff.
 Maybe optimize - this is quite slow.
 '''
@@ -34,6 +34,7 @@ from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 from nltk.tree import Tree
 
+from config import debug
 import script_wrapper
 import script_wrapper as stanford_parser
 import script_wrapper as tsurgeon
@@ -87,15 +88,15 @@ def clean_sentence(tree):
     return tree
 
 
-# Gets the main verb when there are no auxilliaries.
-# Finds VB's that directly descend from the root by ROOT < S < VP < main
+# Gets the get_top_questions verb when there are no auxilliaries.
+# Finds VB's that directly descend from the root by ROOT < S < VP < get_top_questions
 def get_main_verbs(tree):
     main_verbs = tsurgeon.get_main_verbs(tree).split('\n')[:-1]
     main_verbs = [Tree.fromstring(main_verb) for main_verb in main_verbs]
     return main_verbs
 
 
-# Changes main verb to bare form.
+# Changes get_top_questions verb to bare form.
 def fix_inflection(tree, main_verb):
     for node in tree:
         if isinstance(node, nltk.Tree):
@@ -111,7 +112,7 @@ def fix_inflection(tree, main_verb):
 
 
 # If the sentence has no aux verb, inserts the proper do-form before the
-# clause and changes the main verb to its bare form. 
+# clause and changes the get_top_questions verb to its bare form. 
 def move_no_aux(tree):
     # Still need to account for cases where there is no obvious unique MV
     '''
@@ -206,12 +207,14 @@ def supersense_tag(sentence):
     with open("../temp/news1.txt", "w+") as f:
         f.write(str(sentence))
         f.close()
-    result = check_output(['./run_sst.sh', '../../temp/news1.txt'],
-                 cwd="../lib/sst-light-0.4/", stderr=script_wrapper.DEVNULL)
+    if debug:
+        result = check_output(['./run_sst.sh', '../../temp/news1.txt'], cwd="../lib/sst-light/")
+    else:
+        result = check_output(['./run_sst.sh', '../../temp/news1.txt'], cwd="../lib/sst-light/", stderr=script_wrapper.DEVNULL)
     with open("../temp/news1.tags", "w+") as f:
         f.write(result)
     
-    print(result)
+#     print(result)
         
     entities_l = []
     tags_l = []
@@ -315,15 +318,18 @@ def cleanup_question(q):
 
 def question(inputstr):
     entities = supersense_tag(inputstr)
+#     print("Supersense-tagging done")
     entities.update(named_entities(inputstr))
+#     print("NER done")
     main_tree = parser.raw_parse(inputstr).next()
+#     print("Parsing done")
     '''
     main_tree_str = save_embedded_clause(main_tree_str)
     print(main_tree_str)
     '''
     main_tree_str = clean_sentence(main_tree)
     
-    Tree.fromstring(main_tree_str).pprint()
+#     Tree.fromstring(main_tree_str).pprint()
     # TODO: mark_unmovable_tags
     
     main_tree = inverse_verb(main_tree_str)
@@ -333,17 +339,5 @@ def question(inputstr):
     prep = []  # use to store prep when traverse the tree
     gen_question_recur(main_tree, sentence_inversed, sentence, questions, entities, prep)
     questions = [cleanup_question(q) for q in questions]
+    questions.append(fix_output(main_tree))
     return questions
-
-def main():
-    print(question("Clinton wants to go to Washington tomorrow."))
-#     while True:  # Just do a keyboard interrupt to exit the loop.
-#         print("\nEnter a simple declarative sentence:")
-#         inputstr = sys.stdin.readline()
-#         q = question(inputstr)
-#         print("\nQUESTION:")
-#         print(q)
-
-
-if __name__ == "__main__":
-    main()

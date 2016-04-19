@@ -55,7 +55,7 @@ def extractHelper(tree):
 # # EXTRACTION FUNCTIONS ##
 
 
-# Returns all extracted sentences from main sentence.
+# Returns all extracted sentences from get_top_questions sentence.
 def getExtractions(tree):
     result = []
     extractFunctions = [extractNonResMod, extractSubClause, extractParticiple]
@@ -71,6 +71,8 @@ def getExtractions(tree):
 # problem cases. 
 def extractNonResMod(tree):
     subject = tsurgeon.findSubject(tree)
+    if not subject:
+        return
     sub_tree = Tree.fromstring(subject)
     tokens = sub_tree.leaves()
     parts = ' '.join(tokens).split(',')
@@ -80,7 +82,7 @@ def extractNonResMod(tree):
         # check if it is an appositive
         if phrase_type == 'NP':
             # adding 'is' temporarily - might be able to get inflection correct
-            # by examining main verb.
+            # by examining get_top_questions verb.
             sentence = main_subject + 'is' + parts[1].rstrip() + '.'
             return sentence
         # check if it is a relative clause
@@ -194,7 +196,7 @@ def simplify_sen(sent):
     return results
 
 
-def main():
+def get_top_questions():
     sent = "John knows that snow is white and that leaves are green."
     tree = parser.raw_parse(sent).next()
     result = extractSimplifiedSentences(tree)
@@ -206,4 +208,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    get_top_questions()

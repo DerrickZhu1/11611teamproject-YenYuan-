@@ -12,4 +12,5 @@ def timer_log(task=""):
     global start
     end = datetime.now()
     print("[Timer] " + task + ": " + str(end - start))
+    start = datetime.now()
 
