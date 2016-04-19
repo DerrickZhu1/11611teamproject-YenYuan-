@@ -1,1 +1,44 @@
-(ROOT (S (SUBJECT (NNP Clinton)) (VP (VBZ wants) (S (VP (TO to) (VP (VB go) (PP (TO to) (pNP (NNP Washington))) (NP (NN tomorrow)))))) (. .)))
+(ROOT
+  (S
+    (S
+      (PP
+        (IN At)
+        (NP
+          (NP (DT the) (NN close))
+          (PP (IN of) (NP (DT the) (NN season)))))
+      (, ,)
+      (NP (NNP Messi))
+      (VP
+        (VBD received)
+        (NP
+          (DT an)
+          (NN offer)
+          (S
+            (VP
+              (TO to)
+              (VP
+                (VB join)
+                (NP
+                  (NP (NNP Arsenal))
+                  (, ,)
+                  (NP
+                    (NP (PRP$ his) (JJ first))
+                    (PP (IN from) (NP (DT a) (JJ foreign) (NN club)))))))))))
+    (, ,)
+    (CC but)
+    (S
+      (SBAR
+        (IN while)
+        (S
+          (NP (NNP Fbregas) (CC and) (NNP Piqu))
+          (ADVP (RB soon))
+          (VP (VBD left) (PP (IN for) (NP (NNP England))))))
+      (, ,)
+      (NP (NNP Messi))
+      (VP
+        (VBD chose)
+        (S
+          (VP
+            (TO to)
+            (VP (VB remain) (PP (IN in) (NP (NNP Barcelona))))))))
+    (. .)))

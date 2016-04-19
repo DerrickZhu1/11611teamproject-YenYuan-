@@ -65,7 +65,7 @@ public class WriteEntityXml {
 			for(Tree leaf : s.rootNode().getLeaves()){
 
 				if(wordnum > 0){
-					pw.printf(" ");
+					pw.print(" ");
 				}
 				
 				for (Mention m : d.mentions()){
@@ -75,7 +75,7 @@ public class WriteEntityXml {
 					}
 				}
 				
-				pw.printf(leaf.yield().toString());
+				pw.print(leaf.yield().toString());
 				
 				for (Mention m : d.mentions()){
 					List<Tree> mentionLeaves = m.node().getLeaves();
@@ -88,7 +88,7 @@ public class WriteEntityXml {
 				wordnum++;
 			}
 			
-			pw.printf("\n");
+			pw.print("\n");
 			//pw.printf("</sentence>\n");
 			sentnum++;
 		}

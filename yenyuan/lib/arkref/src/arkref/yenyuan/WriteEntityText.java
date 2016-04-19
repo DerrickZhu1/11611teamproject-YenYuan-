@@ -34,7 +34,7 @@ public class WriteEntityText {
 	// };
 
 	static {
-		String[] ss = new String[] { "i", "me", "you", "he", "him", "she", "her", "it", "they", "them" };
+		String[] ss = new String[] { "i", "you", "he", "she", "they" };
 		for (String s : ss)
 			pronouns.add(s);
 	}
@@ -45,13 +45,14 @@ public class WriteEntityText {
 		// pw.printf("<doc>\n");
 		HashMap<String, String> entityMap = new HashMap<>();
 
+		Set<String> replaced = new HashSet<>();
 		for (Sentence s : d.sentences()) {
 			// pw.printf("<sentence>\n");
 			int wordnum = 0;
 			for (Tree leaf : s.rootNode().getLeaves()) {
 
 				if (wordnum > 0) {
-					pw.printf(" ");
+					pw.print(" ");
 				}
 
 				boolean isMention = false;
@@ -68,20 +69,20 @@ public class WriteEntityText {
 						// only handle pronouns
 						if (pronouns.contains(leaf.yield().toString().toLowerCase())) {
 							// replace with the first mention
-							pw.printf(entityMap.get(entityID));
+							pw.print(entityMap.get(entityID));
 							isMention = true;
 						}
 					}
 				}
 
 				if (!isMention) {
-					pw.printf(leaf.yield().toString());
+					pw.print(leaf.yield().toString());
 				}
 
 				wordnum++;
 			}
 
-			pw.printf("\n");
+			pw.print("\n");
 		}
 
 		// pw.printf("</doc>\n");

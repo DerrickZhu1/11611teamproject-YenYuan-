@@ -6,7 +6,7 @@ authors - zhongzhu, bsennish
 Changes made:
 Fixed issues with aux verb handling.
 - Treat have|has|had as aux only when sistered to a VP
-Improved main verb recognition.
+Improved get_top_questions verb recognition.
 - Can handle sentences with embedded clauses.
 - Can handle conjoined VP's
 Handled sentences with basic negation.
@@ -17,7 +17,7 @@ TO DO (in the very near future):
 Preprocessing on complex sentences.
 Fix outstanding issues with simple constructions.
 - Deal with contractions (I'm, you're, etc.)
-Better main verb recognition - maybe with dependency parsing.
+Better get_top_questions verb recognition - maybe with dependency parsing.
 Figure out how to stop tsurgeon from printing loads of stuff.
 Maybe optimize - this is quite slow.
 '''
@@ -84,15 +84,15 @@ def clean_sentence(tree):
     tree = tsurgeon.relabel_NPinPP(tree)
     return tree
 
-# Gets the main verb when there are no auxilliaries.
-# Finds VB's that directly descend from the root by ROOT < S < VP < main
+# Gets the get_top_questions verb when there are no auxilliaries.
+# Finds VB's that directly descend from the root by ROOT < S < VP < get_top_questions
 def get_main_verbs(tree):
     main_verbs = tsurgeon.get_main_verbs(tree).split('\n')[:-1]
     main_verbs = [Tree.fromstring(main_verb) for main_verb in main_verbs]
     return main_verbs
 
 
-# Changes main verb to bare form.
+# Changes get_top_questions verb to bare form.
 def fix_inflection(tree, main_verb):
     for node in tree:
         if isinstance(node, nltk.Tree):
@@ -105,7 +105,7 @@ def fix_inflection(tree, main_verb):
                 fix_inflection(node, main_verb)
 
 # If the sentence has no aux verb, inserts the proper do-form before the
-# clause and changes the main verb to its bare form.
+# clause and changes the get_top_questions verb to its bare form.
 def move_no_aux(tree):
     # Still need to account for cases where there is no obvious unique MV
     '''
@@ -336,7 +336,7 @@ def question(inputstr):
     questions = [cleanup_question(q) for q in questions]
     return questions
 
-def main():
+def get_top_questions():
     s="Tom went to New York yesterday."
     s = "New York, at Feb 9, 2001, The Associated " \
         "Press reported another overnight jump in the price of gas -up nearly " \
@@ -353,6 +353,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    get_top_questions()
     # s=""
     # supersense_tag(s)
